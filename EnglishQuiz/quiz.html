@@ -134,7 +134,7 @@
                 font-size: 48px;
             }
             .answer-text,.action_button,.feedback {
-                font-size: 24px;
+                font-size: 21px;
             }
         }
         @media screen and (max-width:800px){
@@ -142,7 +142,7 @@
                 font-size: 36px;
             }
             .answer-text,.action_button,.feedback {
-                font-size: 18px;
+                font-size: 16px;
             }
         }
         @media screen and (max-width:700px){
@@ -150,7 +150,7 @@
                 font-size: 24px;
             }
             .answer-text,.action_button,.feedback {
-                font-size: 12px;
+                font-size: 10px;
             }
         }
         @media screen and (max-width:500px){
@@ -158,7 +158,7 @@
                 font-size: 18px;
             }
             .answer-text,.action_button,.feedback {
-                font-size: 8px;
+                font-size: 6px;
             }
         }
 
@@ -187,6 +187,7 @@
     </div>
     <!-- <button id="startButton">開始</button>
     <button id="stopButton" disabled>停止</button> -->
+    <!-- <iframe src="img/bgm.mp3" allow="autoplay" style="display:none"></iframe> -->
 
     <script>
 
@@ -206,6 +207,7 @@
         let correctAnswers = 0;
 
         function startQuiz() {
+            currentQuestion = Math.floor(Math.random() * questions.length);
             document.getElementById('quiz-container').style.display = 'block';
             document.getElementById('result-container').style.display = 'none';
             document.getElementById('question').textContent = questions[currentQuestion].word;
@@ -261,7 +263,8 @@
                 feedbackElement.textContent = `不正解。正解は「${questions[currentQuestion].meaning}」です。`;
             }
 
-            currentQuestion++;
+            // currentQuestion++;//currentQuestion
+            currentQuestion = Math.floor(Math.random() * questions.length);
 
             if (currentQuestion < questions.length && correctAnswers < goalCorrectAnswers) {
                 document.getElementById('question').textContent = questions[currentQuestion].word;
