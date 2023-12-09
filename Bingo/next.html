@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+    td {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+    td.selected {
+      background-color: #aaffaa;
+    }
+    td.bingo {
+      background-color: #ffaaaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Next Page</h1>
+  <div id="numbers-container"></div>
+  <p id="game-start-time"></p>
+  <p id="bingo-count">Bingo Count: 0</p>
+  <p id="bingo-message"></p>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const numbersContainer = document.getElementById('numbers-container');
+      const gameStartTimeElement = document.getElementById('game-start-time');
+      const bingoCountElement = document.getElementById('bingo-count');
+      const bingoMessageElement = document.getElementById('bingo-message');
+
+      // Read numbers data from sessionStorage
+      const numbersData = sessionStorage.getItem('numbersData');
+      const numbers = numbersData ? JSON.parse(numbersData) : generateNumbers();
+      const selectedCoordinates = [];
+      let prevBingoCount = 0;
+
+      numbersContainer.innerHTML = '<h2>Selected Numbers:</h2>';
+      const numbersTable = document.createElement('table');
+
+      for (let i = 0; i < 5; i++) {
+        const row = numbersTable.insertRow();
+        for (let j = 0; j < 5; j++) {
+          const index = i * 5 + j;
+          const cell = row.insertCell();
+          cell.textContent = numbers[index];
+          cell.dataset.index = index;
+          cell.addEventListener('click', () => toggleCell(cell, selectedCoordinates));
+        }
+      }
+
+      numbersContainer.appendChild(numbersTable);
+
+      // Display game start time if it is not set in sessionStorage
+      if (!sessionStorage.getItem('gameStartTime')) {
+        const gameStartTime = new Date();
+        sessionStorage.setItem('gameStartTime', gameStartTime.toISOString());
+      }
+
+      const formattedStartTime = sessionStorage.getItem('gameStartTime').split('T')[1].split('.')[0];
+      gameStartTimeElement.textContent = `Game Start Time: ${formattedStartTime}`;
+
+      // Remove numbers parameter from the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+
+      function generateNumbers() {
+        // Generate an array of unique random numbers from 1 to 100
+        const numbers = [];
+        while (numbers.length < 25) {
+          const randomNumber = Math.floor(Math.random() * 100) + 1;
+          if (!numbers.includes(randomNumber)) {
+            numbers.push(randomNumber);
+          }
+        }
+        // Save numbers data to sessionStorage
+        sessionStorage.setItem('numbersData', JSON.stringify(numbers));
+        return numbers;
+      }
+
+      function toggleCell(clickedCell, selectedCoordinates) {
+        const index = clickedCell.dataset.index;
+        const coordinate = { row: Math.floor(index / 5), col: index % 5 };
+
+        if (isSelected(coordinate, selectedCoordinates)) {
+          // Deselect the cell
+          removeCoordinate(coordinate, selectedCoordinates);
+          clickedCell.classList.remove('selected');
+        } else {
+          // Select the cell
+          selectedCoordinates.push(coordinate);
+          clickedCell.classList.add('selected');
+        }
+
+        checkBingo(selectedCoordinates);
+      }
+
+      function isSelected(coordinate, selectedCoordinates) {
+        return selectedCoordinates.some(coord => coord.row === coordinate.row && coord.col === coordinate.col);
+      }
+
+      function removeCoordinate(coordinate, selectedCoordinates) {
+        const index = selectedCoordinates.findIndex(coord => coord.row === coordinate.row && coord.col === coordinate.col);
+        if (index !== -1) {
+          selectedCoordinates.splice(index, 1);
+        }
+      }
+
+      function checkBingo(selectedCoordinates) {
+        // Check rows, columns, and diagonals for bingo
+        const rows = Array.from({ length: 5 }, (_, i) => Array.from({ length: 5 }, (_, j) => ({ row: i, col: j })));
+        const columns = Array.from({ length: 5 }, (_, j) => Array.from({ length: 5 }, (_, i) => ({ row: i, col: j })));
+        const diagonals = [
+          Array.from({ length: 5 }, (_, i) => ({ row: i, col: i })), // Top-left to bottom-right
+          Array.from({ length: 5 }, (_, i) => ({ row: i, col: 4 - i })), // Top-right to bottom-left
+        ];
+
+        const currentBingoCount = countBingo(selectedCoordinates, rows, columns, diagonals);
+
+        if (currentBingoCount > prevBingoCount) {
+          // Increment bingo count
+          bingoCountElement.textContent = `Bingo Count: ${currentBingoCount}`;
+          // Display Bingo message
+          bingoMessageElement.textContent = 'Bingo!';
+        } else {
+          // Clear Bingo message
+          bingoMessageElement.textContent = '';
+        }
+
+        // Update previous bingo count
+        prevBingoCount = currentBingoCount;
+      }
+
+      function countBingo(selectedCoordinates, rows, columns, diagonals) {
+        // Check rows, columns, and diagonals for bingo
+        const isBingo = (group) => group.every(coord => isSelected(coord, selectedCoordinates));
+
+        const bingoCount = rows.concat(columns, diagonals).reduce((count, group) => {
+          return isBingo(group) ? count + 1 : count;
+        }, 0);
+
+        return bingoCount;
+      }
+    });
+  </script>
+</body>
+</html>

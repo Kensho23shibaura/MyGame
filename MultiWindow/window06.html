@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Site Opener</title>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 5px;
+    }
+    .grid-container2 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(1, 1fr);
+      gap: 5px;
+    }
+
+    .website-box {
+      position: relative;
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .website-box2 {
+      position: relative;
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 10px;
+    }
+
+    #resetBtn, #openAllBtn {
+      margin-top: 20px;
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .fullscreen-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+
+    .website-group {
+      position: absolute;
+      top: 1px;
+      left: 5px;
+      background-color: #333;
+      color: #fff;
+      margin: 3px;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+    .website-group2 {
+      position: absolute;
+      left: 5px;
+      background-color: #333;
+      color: #fff;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-container">
+  <div class="website-box">
+    <button class="website-group" onclick="toggleFullscreen('iframeContainer1')">Group A</button>
+    <input type="text" id="url1" placeholder="Enter URL" value='https://loungegame.site/adminenter/dG9rZW49YVdROU1Ua3dORE0yTnladVlXMWxQVTFVWTNkTlZGVjNUVVJqTkUxbg'>
+    <button onclick="openWebsite('url1')">Open</button>
+    <div class="iframe-container" id="iframeContainer1">
+    </div>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group" onclick="toggleFullscreen('iframeContainer1')">Group B</button>
+    <input type="text" id="url2" placeholder="Enter URL">
+    <button onclick="openWebsite('url2')">Open</button>
+    <div class="iframe-container" id="iframeContainer2">
+    </div>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group" onclick="toggleFullscreen('iframeContainer1')">Group C</button>
+    <input type="text" id="url3" placeholder="Enter URL">
+    <button onclick="openWebsite('url3')">Open</button>
+    <div class="iframe-container" id="iframeContainer3">
+    </div>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group" onclick="toggleFullscreen('iframeContainer1')">Group D</button>
+    <input type="text" id="url4" placeholder="Enter URL">
+    <button onclick="openWebsite('url4')">Open</button>
+    <div class="iframe-container" id="iframeContainer4">
+    </div>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group" onclick="toggleFullscreen('iframeContainer1')">Group E</button>
+    <input type="text" id="url5" placeholder="Enter URL">
+    <button onclick="openWebsite('url5')">Open</button>
+    <div class="iframe-container" id="iframeContainer5">
+    </div>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group" onclick="toggleFullscreen('iframeContainer1')">Group F</button>
+    <input type="text" id="url6" placeholder="Enter URL">
+    <button onclick="openWebsite('url6')">Open</button>
+    <div class="iframe-container" id="iframeContainer6">
+    </div>
+  </div>
+
+</div>
+
+<div class="grid-container2">
+    <div class="website-box2">
+        <button class="website-group2">A</button>
+        <input type="text" id="urlInput1" placeholder="Enter URL" value="https://loungegamejoin.site/enter/dG9rZW49YVdROU1Ua3dORE0yTnladVlXMWxQVTFVWTNkTlZGVjNUVVJqTkUxbg">
+        <button onclick="generateQRCode('urlInput1','qrcode1')">Make</button><br>
+        <div id="qrcode1"></div>
+    </div>
+  
+    <div class="website-box2">
+        <button class="website-group2">B</button>
+        <input type="text" id="urlInput2" placeholder="Enter URL">
+        <button onclick="generateQRCode('urlInput2','qrcode2')">Make</button><br>
+        <div id="qrcode2"></div>
+    </div>
+  
+    <div class="website-box2">
+        <button class="website-group2">C</button>
+        <input type="text" id="urlInput3" placeholder="Enter URL">
+        <button onclick="generateQRCode('urlInput3','qrcode3')">Make</button><br>
+        <div id="qrcode3"></div>
+    </div>
+  
+    <div class="website-box2">
+        <button class="website-group2">D</button>
+        <input type="text" id="urlInput4" placeholder="Enter URL">
+        <button onclick="generateQRCode('urlInput4','qrcode4')">Make</button><br>
+        <div id="qrcode4"></div>
+    </div>
+  
+    <div class="website-box2">
+        <button class="website-group2">E</button>
+        <input type="text" id="urlInput5" placeholder="Enter URL">
+        <button onclick="generateQRCode('urlInput5','qrcode5')">Make</button><br>
+        <div id="qrcode5"></div>
+    </div>
+  
+    <div class="website-box2">
+        <button class="website-group2">F</button>
+        <input type="text" id="urlInput6" placeholder="Enter URL">
+        <button onclick="generateQRCode('urlInput6','qrcode6')">Make</button><br>
+        <div id="qrcode6"></div>
+    </div>
+
+
+  </div>
+  
+  <div class="website-box">
+    <button id="resetBtn" onclick="resetAll()">Reset</button>
+    <button id="openAllBtn" onclick="openAllWebsites()">Open All</button>
+</div>
+
+
+<script>
+  function openWebsite(inputId) {
+    const urlInput = document.getElementById(inputId);
+    const url = urlInput.value;
+    const iframeContainer = document.getElementById(`iframeContainer${inputId.charAt(inputId.length - 1)}`);
+    iframeContainer.innerHTML = `<iframe src="${url}"></iframe>`;
+    iframeContainer.classList.add('iframe-active');
+  }
+
+  function resetAll() {
+    const urlInputs = document.querySelectorAll('input[type="text"]');
+    const iframeContainers = document.querySelectorAll('.iframe-container');
+    
+    urlInputs.forEach(input => input.value = '');
+    iframeContainers.forEach(container => {
+      container.innerHTML = '';
+      container.classList.remove('iframe-active');
+    });
+  }
+
+  function openAllWebsites() {
+    const urlInputs = document.querySelectorAll('input[type="text"]');
+    const iframeContainers = document.querySelectorAll('.iframe-container');
+    
+    urlInputs.forEach((input, index) => {
+      const url = input.value;
+      const iframeContainer = iframeContainers[index];
+      
+      if (url.trim() !== '') {
+        iframeContainer.innerHTML = `<iframe src="${url}"></iframe>`;
+        iframeContainer.classList.add('iframe-active');
+      }
+    });
+  }
+
+    function toggleFullscreen(containerId) {
+        const iframeContainer = document.getElementById(containerId);
+        const iframe = iframeContainer.querySelector('iframe');
+
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+        } else if (iframe.mozRequestFullScreen) {
+            iframe.mozRequestFullScreen();
+        } else if (iframe.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen();
+        } else if (iframe.msRequestFullscreen) {
+            iframe.msRequestFullscreen();
+        }
+    }
+
+    function generateQRCode(id1,id2) {
+        var urlInput = document.getElementById(id1).value;
+        var qrcode = new QRCode(document.getElementById(id2), {
+            text: urlInput,
+            width: 128,
+            height: 128
+        });
+    }
+</script>
+
+</body>
+</html>

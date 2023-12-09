@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bingo Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #bingo-board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+      margin-top: 20px;
+    }
+    .cell {
+      width: 50px;
+      height: 50px;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .selected {
+      background-color: #aaffaa;
+    }
+    #confirm-button {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #dial-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border: 2px solid #ccc;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    #dial {
+      font-size: 18px;
+    }
+    #dial-buttons {
+      margin-top: 10px;
+    }
+    .dial-button {
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #random-button {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #welcome-message {
+      margin-top: 20px;
+    }
+    #name-input {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="name-input">
+    <label for="username">Enter your username: </label>
+    <input type="text" id="username" placeholder="Your username">
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <div id="bingo-board" style="display: none;"></div>
+  <button id="confirm-button" onclick="confirmSelection()" disabled style="display: none;">Confirm Selection</button>
+  <button id="random-button" onclick="fillRandom()" style="display: none;">Fill Random</button>
+
+  <div id="dial-container">
+    <div id="dial">Select a number:</div>
+    <div id="dial-buttons"></div>
+  </div>
+
+  <div id="welcome-message"></div>
+
+  <script>
+    let username;
+    let selectedNumbers = [];
+    let autoFilledNumbers = [];
+    let isGameStarted = false;
+    let isDialEnabled = false;
+    let currentCellIndex;
+
+    function startGame() {
+      username = document.getElementById('username').value;
+      if (!username) {
+        alert('Please enter your username.');
+        return;
+      }
+
+      // Hide input and show welcome message
+      document.getElementById('name-input').style.display = 'none';
+      document.getElementById('welcome-message').innerText = `${username}, welcome!`;
+      document.getElementById('welcome-message').style.display = 'block';
+
+      isGameStarted = true;
+      generateBingoBoard();
+    }
+
+    function generateBingoBoard() {
+      const boardContainer = document.getElementById('bingo-board');
+      boardContainer.innerHTML = '';
+
+      for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.addEventListener('click', () => enableDial(i, j));
+          boardContainer.appendChild(cell);
+        }
+      }
+
+      // Show game elements
+      document.getElementById('bingo-board').style.display = 'grid';
+      document.getElementById('confirm-button').style.display = 'block';
+      document.getElementById('random-button').style.display = 'block';
+    }
+
+    function enableDial(row, col) {
+      if (!isGameStarted) {
+        alert('Please start the game first.');
+        return;
+      }
+
+      isDialEnabled = true;
+      currentCellIndex = row * 5 + col;
+      updateDialButtons();
+      document.getElementById('dial-container').style.display = 'block';
+    }
+
+    function updateDialButtons() {
+      const dialButtonsContainer = document.getElementById('dial-buttons');
+      dialButtonsContainer.innerHTML = '';
+
+      for (let i = 1; i <= 100; i++) {
+        const dialButton = document.createElement('div');
+        dialButton.className = 'dial-button';
+        dialButton.innerText = i;
+        dialButton.addEventListener('click', () => selectNumber(i));
+        dialButtonsContainer.appendChild(dialButton);
+      }
+    }
+
+    function selectNumber(number) {
+      if (!isDialEnabled) {
+        return;
+      }
+
+      if (selectedNumbers.includes(number) || autoFilledNumbers.includes(number)) {
+        alert('Number already selected. Choose a different number.');
+        return;
+      }
+
+      selectedNumbers.push(number);
+      updateBoard(number);
+      disableDial();
+    }
+
+    function updateBoard(selectedNumber) {
+      const cells = document.querySelectorAll('.cell');
+      cells[currentCellIndex].innerText = selectedNumber;
+      cells[currentCellIndex].classList.add('selected');
+    }
+
+    function disableDial() {
+      isDialEnabled = false;
+      document.getElementById('dial-container').style.display = 'none';
+      document.getElementById('confirm-button').disabled = false;
+    }
+
+    function confirmSelection() {
+      if (isBoardComplete()) {
+        const allNumbers = [...selectedNumbers, ...autoFilledNumbers];
+        const selectedNumbersString = allNumbers.join(',');
+        const selectedNumbersForPositions = [];
+
+        // Store selected numbers with positions
+        for (let i = 0; i < 5; i++) {
+          for (let j = 0; j < 5; j++) {
+            const index = i * 5 + j;
+            selectedNumbersForPositions.push(`${i},${j},${allNumbers[index]}`);
+          }
+        }
+
+        const selectedNumbersWithPositionsString = selectedNumbersForPositions.join(';');
+
+        window.location.href = `next.html?numbers=${selectedNumbersString}&positions=${selectedNumbersWithPositionsString}`;
+      } else {
+        alert('Not all cells are filled. Please fill all cells before confirming.');
+      }
+    }
+
+    function isBoardComplete() {
+      const cells = document.querySelectorAll('.cell');
+      for (const cell of cells) {
+        if (!cell.classList.contains('selected')) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function fillRandom() {
+      if (!isGameStarted) {
+        alert('Please start the game first.');
+        return;
+      }
+
+      const cells = document.querySelectorAll('.cell:not(.selected)');
+      const availableNumbers = Array.from({ length: 100 }, (_, i) => i + 1).filter(number => !selectedNumbers.includes(number) && !autoFilledNumbers.includes(number));
+
+      cells.forEach(cell => {
+        const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+        const randomNumber = availableNumbers.splice(randomIndex, 1)[0];
+        cell.innerText = randomNumber;
+        cell.classList.add('selected');
+        autoFilledNumbers.push(randomNumber);
+      });
+
+      document.getElementById('confirm-button').disabled = false;
+    }
+  </script>
+</body>
+</html>

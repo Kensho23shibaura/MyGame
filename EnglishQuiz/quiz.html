@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="english.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英単語クイズアプリ</title>
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #quiz-container {
+            margin-top: 20px;
+            width: 50vw;
+            height: 35vw;
+            position:relative;
+            left: 25vw;
+            background-image: url("img/blackboard.png");
+            background-size: 100%;
+            background-repeat: no-repeat;
+        }
+
+        #result-container {
+            margin-top: 20px;
+        }
+
+        .question-text {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 64px;
+            width: 40vw;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            text-shadow: 1px 1px 0 #FFF, -1px -1px 0 #FFF,
+                -1px 1px 0 #FFF, 1px -1px 0 #FFF,
+                0px 1px 0 #FFF, 0-1px 0 #FFF,
+                -1px 0 0 #FFF, 1px 0 0 #FFF;
+            position: absolute;
+            top: 8vw;
+            left: 5vw;
+
+        }
+
+        .answer-text {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 36px;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            width: 28vw;
+            height: 4vw;
+            margin-top: 5px;
+            position: absolute;
+            top: 16vw;
+            left: 5vw;
+        }
+
+        .action_button {
+            width: 10vw;
+            height: 4vw;
+            border-radius: 15px;
+            font-family: 'Helvetica', sans-serif;
+            font-size: 24px;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            position: absolute;
+            top: 16.5vw;
+            left: 34.5vw;
+        }
+
+        .feedback-text {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 24px;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            width: 40vw;
+            margin-top: 5px;
+            position: absolute;
+            left: 5vw;
+        }
+        #answer-feedback{
+            top: 24vw;
+        }
+        #score{
+            top: 27vw;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <h1>英単語クイズアプリ</h1>
+    <p>英単語の意味を答えるクイズに挑戦しましょう！</p>
+
+    <button onclick="startQuiz()">クイズを始める</button>
+
+    <div id="quiz-container">
+        <br><br><br><br><br><br><br>
+        <p id="question" class="question-text">???</p>
+        <input type="text" class="answer-text" id="answer" placeholder="意味を入力" onkeydown="handleKeyDown(event)">
+        <button class="action_button" onclick="checkAnswer()">回答する</button>
+        <p id="answer-feedback" class="feedback-text">?????</p>
+        <p id="score" class="feedback-text">正解数: 0 / 5</p>
+    </div>
+
+    <div id="result-container">
+        <h2 id="result"></h2>
+    </div>
+    <!-- <button id="startButton">開始</button>
+    <button id="stopButton" disabled>停止</button> -->
+
+    <script>
+
+        let audio;
+        let isPlaying = false;
+
+        // document.getElementById('startButton').addEventListener('click', function () {
+        //     playAlarm();
+        // });
+
+        // document.getElementById('stopButton').addEventListener('click', function () {
+        //     stopAlarm();
+        // });
+
+        const goalCorrectAnswers = 5;
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+
+        function startQuiz() {
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('result-container').style.display = 'none';
+            document.getElementById('question').textContent = questions[currentQuestion].word;
+            document.getElementById('score').textContent = `正解数: ${correctAnswers} / ${goalCorrectAnswers}`;
+            playAlarm();
+        }
+
+        function playAlarm() {
+            // アラーム音声ファイルのパスを設定
+            const audioPath = 'img/bgm.mp3';
+            console.log(audioPath);
+            // Audio要素を作成
+            audio = new Audio(audioPath);
+
+            // // ボタンの状態を変更
+            // document.getElementById('startButton').disabled = true;
+            // document.getElementById('stopButton').disabled = false;
+
+            // アラームが終了した時の処理
+            audio.addEventListener('ended', function () {
+                if (isPlaying) {
+                    // アラームが終了したら再度再生
+                    audio.play();
+                }
+            });
+
+            isPlaying = true;
+            // アラーム再生
+            audio.play();
+        }
+
+        function stopAlarm() {
+            isPlaying = false;
+
+            // アラーム停止
+            audio.pause();
+            audio.currentTime = 0;
+
+            // // ボタンの状態を変更
+            // document.getElementById('startButton').disabled = false;
+            // document.getElementById('stopButton').disabled = true;
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value.toLowerCase();
+            const correctAnswer = questions[currentQuestion].meaning.toLowerCase();
+            const feedbackElement = document.getElementById('answer-feedback');
+
+            if (userAnswer === correctAnswer) {
+                feedbackElement.textContent = '正解！';
+                correctAnswers++;
+            } else {
+                feedbackElement.textContent = `不正解。正解は「${questions[currentQuestion].meaning}」です。`;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length && correctAnswers < goalCorrectAnswers) {
+                document.getElementById('question').textContent = questions[currentQuestion].word;
+                document.getElementById('answer').value = '';
+                document.getElementById('score').textContent = `正解数: ${correctAnswers} / ${goalCorrectAnswers}`;
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            stopAlarm();
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('result-container').style.display = 'block';
+
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = `クイズ終了！正解数: ${correctAnswers} / ${goalCorrectAnswers}`;
+
+            if (correctAnswers === goalCorrectAnswers) {
+                resultElement.style.color = 'green';
+            } else {
+                resultElement.style.color = 'red';
+            }
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+    </script>
+
+</body>
+
+</html>

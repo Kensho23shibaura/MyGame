@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+
+    td {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    td.selected {
+      background-color: #aaffaa;
+    }
+    td.nonuse {
+      background-color: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="numbers-container"></div>
+  <br>
+  <button onclick="startRoulette()">開始</button>
+  <button onclick="resetRoulette()">リセット</button>
+  <p id="result"></p>
+
+  <script>
+
+    const selectedCoordinates = [];
+    let numbersTable;
+    document.addEventListener('DOMContentLoaded', function () {
+      const numbersContainer = document.getElementById('numbers-container');
+      const gameStartTimeElement = document.getElementById('game-start-time');
+      const numbers = Array.from({ length: 100 }, (_, i) => i + 1);
+      let prevBingoCount = 0;
+
+      numbersContainer.innerHTML = '<h2>Selected Numbers:</h2>';
+      numbersTable = document.createElement('table');
+      numbersTable.classList.add('numbersTable');
+
+      for (let i = 0; i < 5; i++) {
+        const row = numbersTable.insertRow();
+        for (let j = 0; j < 10; j++) {
+          const index = i * 10 + j;
+          const cell = row.insertCell();
+          cell.textContent = numbers[index];
+          cell.dataset.index = index;
+          if (numbers[index] > 50) {
+            cell.classList.add('nonuse');
+          } else {
+            cell.addEventListener('click', () => toggleCell(cell, selectedCoordinates));
+          }
+        }
+      }
+
+      numbersContainer.appendChild(numbersTable);
+
+      function toggleCell(clickedCell, selectedCoordinates) {
+        const index = clickedCell.dataset.index;
+        const coordinate = { row: Math.floor(index / 5), col: index % 5 };
+
+        if (isSelected(coordinate, selectedCoordinates)) {
+          // Deselect the cell
+          removeCoordinate(coordinate, selectedCoordinates);
+          clickedCell.classList.remove('selected');
+        } else {
+          // Select the cell
+          selectedCoordinates.push(coordinate);
+          clickedCell.classList.add('selected');
+        }
+      }
+
+      function isSelected(coordinate, selectedCoordinates) {
+        return selectedCoordinates.some(coord => coord.row === coordinate.row && coord.col === coordinate.col);
+      }
+
+      function removeCoordinate(coordinate, selectedCoordinates) {
+        const index = selectedCoordinates.findIndex(coord => coord.row === coordinate.row && coord.col === coordinate.col);
+        if (index !== -1) {
+          selectedCoordinates.splice(index, 1);
+        }
+      }
+    });
+
+    const minNumber = 1; // 選択肢の最小値
+    const maxNumber = 50; // 選択肢の最大値
+    let selectedNumber; // 選ばれた数字を保持する変数
+    let usedNumbers = []; // 出た数字を保持する配列
+
+    function startRoulette() {
+      // まだ出ていない数字を抽選
+      const remainingNumbers = getRemainingNumbers();
+      if(remainingNumbers.length == 0){
+        return;
+      }
+      selectedNumber = remainingNumbers[Math.floor(Math.random() * remainingNumbers.length)];
+
+      // 出た数字を使用済みとしてマーク
+      usedNumbers.push(selectedNumber);
+      autoCheckCell(selectedNumber, selectedCoordinates)
+
+      // 結果を表示
+      const resultElement = document.getElementById("result");
+      resultElement.textContent = `選ばれた数字は ${selectedNumber} です。`;
+    }
+
+    function resetRoulette() {
+      // 出た数字をリセット
+      usedNumbers = [];
+
+      // 結果をリセット
+      const resultElement = document.getElementById("result");
+      resultElement.textContent = "";
+      for (let No = minNumber; No <= maxNumber; No++) {
+        const targetCell = numbersTable.querySelector(`td[data-index="${No - 1}"]`);
+        const coordinate = { row: Math.floor(No / 5), col: No % 5 };
+        removeCoordinate(coordinate, selectedCoordinates);
+        targetCell.classList.remove('selected');
+      }
+    }
+    function removeCoordinate(coordinate, selectedCoordinates) {
+      const index = selectedCoordinates.findIndex(coord => coord.row === coordinate.row && coord.col === coordinate.col);
+      if (index !== -1) {
+        selectedCoordinates.splice(index, 1);
+      }
+    }
+
+    function getRemainingNumbers() {
+      const allNumbers = Array.from({ length: maxNumber - minNumber + 1 }, (_, i) => i + minNumber);
+      return allNumbers.filter(number => !usedNumbers.includes(number));
+    }
+
+    function autoCheckCell(No, selectedCoordinates) {
+      const targetCell = numbersTable.querySelector(`td[data-index="${No - 1}"]`);
+      const coordinate = { row: Math.floor(No / 5), col: No % 5 };
+      selectedCoordinates.push(coordinate);
+      targetCell.classList.add('selected');
+    }
+
+  </script>
+</body>
+
+</html>
