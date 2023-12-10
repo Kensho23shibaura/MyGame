@@ -63,14 +63,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 20px;
     }
 
     .health-bar {
       width: 30vw;
       height: 30px;
       background-color: #ddd;
-      margin-top: 10px;
       position: absolute;
       top: 15vh;
       left: 0.5vw;
@@ -88,7 +86,6 @@
 
     .answer-text-input {
       width: 25vw;
-      margin-top: 10px;
       position: absolute;
       top: 23vh;
       left: 2.5vw;
@@ -194,7 +191,7 @@
     <button id="addBtn" class="action_button default_text small_text" onclick="addHealth()">一律</button>
     <button id="resetBtn" class="action_button default_text small_text"
       onclick="showAlert('**確認**','初期化してよろしいですか?','confirm','resetHealth()')">初期化</button>
-    <button class="action_button default_text small_text" onclick ="mute(this)" id="muteBtn" value="muted" >🔇ミュート中</button>
+    <button class="action_button default_text small_text" onclick ="mute(this)" id="muteBtn">🔇ミュート中</button>
   </div>
   <br><br><br><br><br>
   <div class="website-box2">
@@ -206,14 +203,13 @@
   <script>
     var muting = true;
     function mute(obj){
-      if(obj.value=="muted"){
+      if(muting == true){
         muting = false;
         obj.innerHTML="🎵　通知中　"
-        obj.value="ok";
-      }else{
+      }else if (muting == false){
+        stopAllAlarms();
         muting = true;
         obj.innerHTML = "🔇ミュート中";
-        obj.value= "muted";
       }
     }
 
@@ -253,9 +249,7 @@
 
     function showQuestion() {
       if (muting == false){
-        var audioFile = "img/question.mp3";
-        var audio = new Audio(audioFile);
-        audio.play()
+        const sound = playAlarm("img/question.mp3", false);
       }
       const questionTextElement = document.getElementById('questionText');
       showAlert(questionTextElement.textContent, Object.keys(QAdict)[questionNumber - 1]);
@@ -263,9 +257,7 @@
 
     function showAnswer() {
       if (muting == false){
-        var audioFile = "img/drumroll1.mp3";
-        var audio = new Audio(audioFile);
-        audio.play()
+        const sound = playAlarm("img/drumroll1.mp3", false);
       }
       animateNumber();
     }
@@ -300,13 +292,11 @@
         const inputAnswer = parseInt(inputAnswerInput.value);
         if (inputAnswer == correctAnswer) {
           if (muting == false){
-            var audioFile = "img/fanfare.mp3";
-            var audio = new Audio(audioFile);
-            audio.play()
+            const sound = playAlarm("img/fanfare.mp3", false);
           }
         }
         const decreaseAmount = Math.abs(inputAnswer - correctAnswer);
-        const newHealth = Math.max(-50, currentHealth[barNumber - 1] - decreaseAmount);
+        const newHealth = Math.max(0, currentHealth[barNumber - 1] - decreaseAmount);
         currentHealth[barNumber - 1] = newHealth;
         inputAnswerInput.value = "";
       }
@@ -361,9 +351,7 @@
           clearInterval(animationIntervalId);
           resultDisplay.textContent = "正解：" + set2fig(targetNumber) + "%";
           if (muting == false){
-            var audioFile = "img/drumroll2.mp3";
-            var audio = new Audio(audioFile);
-            audio.play()
+            const sound = playAlarm("img/drumroll2.mp3", false);
           }
         }
       }, animationInterval);
