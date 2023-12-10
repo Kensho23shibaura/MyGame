@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="text/javascript" src="./../util/popup.js"></script>
+  <script type="text/javascript" src="./../util/audio.js"></script>
+  <link rel="stylesheet" href="./../util/default.css" type="text/css">
   <link rel="stylesheet" href="./../util/popup.css" type="text/css">
   <title>Percent Balloon</title>
   <style>
@@ -14,12 +16,6 @@
       background-position: center;
       background-repeat: no-repeat;
       height: 100vh;
-    }
-    *{font-size: 24px;}
-
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
     }
 
     .grid-container {
@@ -87,36 +83,10 @@
     }
 
     .health-text {
-      font-family: 'Helvetica', sans-serif;
-      font-size: 64px;
-      color: black;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 10px;
-      text-shadow: 1px 1px 0 #FFF, -1px -1px 0 #FFF,
-        -1px 1px 0 #FFF, 1px -1px 0 #FFF,
-        0px 1px 0 #FFF, 0-1px 0 #FFF,
-        -1px 0 0 #FFF, 1px 0 0 #FFF;
-    }
-
-    .answer-text {
-      font-family: 'Helvetica', sans-serif;
-      font-size: 64px;
-      color: black;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 10px;
-      text-shadow: 1px 1px 0 #FFF, -1px -1px 0 #FFF,
-        -1px 1px 0 #FFF, 1px -1px 0 #FFF,
-        0px 1px 0 #FFF, 0-1px 0 #FFF,
-        -1px 0 0 #FFF, 1px 0 0 #FFF;
+      margin-top: 5vh;
     }
 
     .answer-text-input {
-      font-family: 'Helvetica', sans-serif;
-      color: black;
-      font-weight: bold;
-      text-align: center;
       width: 25vw;
       margin-top: 10px;
       position: absolute;
@@ -129,16 +99,12 @@
     }
 
     .action_button {
-      width: calc(12vw - 20px);
+      width: 10vw;
       height: 5vh;
       border-radius: 15px;
       margin: calc(5px);
-      font-family: 'Helvetica', sans-serif;
-      color: black;
-      font-weight: bold;
-      text-align: center;
     }
-    #muteBtn{width: calc(24vw - 20px);}
+    #muteBtn{width: calc(20vw + 10px);}
 
     #questionBtn {background: #3a5ee7;}
     #questionBtn:hover {background: #2a4ed7;}
@@ -153,102 +119,86 @@
     #muteBtn{background: #a9e54d;}
     #muteBtn:hover{background: #99d53d;}
 
-    @media screen and (max-width:1200px){
-      *{font-size: 18px;}
-    }
-    @media screen and (max-width:900px){
-      *{font-size: 16px;}
-    }
-    @media screen and (max-width:800px){
-      *{font-size: 12px;}
-    }
-    @media screen and (max-width:700px){
-      *{font-size: 10px;}
-    }
-    @media screen and (max-width:500px){
-      *{font-size: 5px;}
-    }
-
   </style>
 </head>
 
-<body>
+<body class="default_text">
 
   <div class="grid-container">
     <div class="website-box">
-      <button class="website-group" onclick="">Group A</button>
-      <div class="health-text" id="health-text-1">100</div>
+      <button class="website-group default_text small_text" onclick="">Group A</button>
+      <div class="health-text large_text shadow" id="health-text-1">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-1"></div>
       </div>
-      <input type="number" class="answer-text-input" id="answerInput1" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput1" placeholder="回答" min="0" step="1" max="100">
     </div>
 
     <div class="website-box">
-      <button class="website-group" onclick="">Group B</button>
-      <div class="health-text" id="health-text-2">100</div>
+      <button class="website-group default_text small_text" onclick="">Group B</button>
+      <div class="health-text large_text shadow" id="health-text-2">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-2"></div>
       </div>
-      <input type="number" class="answer-text-input" id="answerInput2" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput2" placeholder="回答" min="0" step="1" max="100">
     </div>
 
     <div class="website-box">
-      <button class="website-group" onclick="">Group C</button>
-      <div class="health-text" id="health-text-3">100</div>
+      <button class="website-group default_text small_text" onclick="">Group C</button>
+      <div class="health-text large_text shadow" id="health-text-3">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-3"></div>
       </div>
-      <input type="number" class="answer-text-input" id="answerInput3" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput3" placeholder="回答" min="0" step="1" max="100">
     </div>
 
     <div class="website-box">
-      <button class="website-group" onclick="">Group D</button>
-      <div class="health-text" id="health-text-4">100</div>
+      <button class="website-group default_text small_text" onclick="">Group D</button>
+      <div class="health-text large_text shadow" id="health-text-4">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-4"></div>
       </div>
-      <input type="number" class="answer-text-input" id="answerInput4" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput4" placeholder="回答" min="0" step="1" max="100">
     </div>
 
     <div class="website-box">
-      <button class="website-group" onclick="">Group E</button>
-      <div class="health-text" id="health-text-5">100</div>
+      <button class="website-group default_text small_text" onclick="">Group E</button>
+      <div class="health-text large_text shadow" id="health-text-5">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-5"></div>
       </div>
-      <input type="number" class="answer-text-input" id="answerInput5" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput5" placeholder="回答" min="0" step="1" max="100">
     </div>
 
     <div class="website-box">
-      <button class="website-group" onclick="">Group F</button>
-      <div class="health-text" id="health-text-6">100</div>
+      <button class="website-group default_text small_text" onclick="">Group F</button>
+      <div class="health-text large_text shadow" id="health-text-6">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-6"></div>
       </div>
-      <input type="number" class="answer-text-input" id="answerInput6" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput6" placeholder="回答" min="0" step="1" max="100">
     </div>
 
   </div>
 
   <div class="website-box2">
-    <button id="questionText" class="action_button" onclick="nextQuestion()">1問目</button>
-    <button id="questionBtn" class="action_button" onclick="showQuestion()">出題</button>
-    <button id="answerBtn" class="action_button"
+    <button id="questionText" class="action_button default_text small_text" onclick="nextQuestion()">1問目</button>
+    <button id="questionBtn" class="action_button default_text small_text" onclick="showQuestion()">出題</button>
+    <button id="answerBtn" class="action_button default_text small_text"
       onclick="showAlert('**確認**','答えを表示してよろしいですか?','confirm','showAnswer()')">答え</button>
-    <button id="reflectBtn" class="action_button"
+    <button id="reflectBtn" class="action_button default_text small_text"
       onclick="showAlert('**確認**','結果を反映してよろしいですか?','confirm','decreaseHealth()')">反映</button>
     <br>
-    <div class="answer-text" id="correctAnswer">正解：??%</div>
+    <div class="large_text shadow" id="correctAnswer">正解：??%</div>
     <br>
-    <button id="addBtn" class="action_button" onclick="addHealth()">一律</button>
-    <button id="resetBtn" class="action_button"
+    <button id="addBtn" class="action_button default_text small_text" onclick="addHealth()">一律</button>
+    <button id="resetBtn" class="action_button default_text small_text"
       onclick="showAlert('**確認**','初期化してよろしいですか?','confirm','resetHealth()')">初期化</button>
-    <button class="action_button" onclick ="mute(this)" id="muteBtn" value="muted" >🔇ミュート中</button>
+    <button class="action_button default_text small_text" onclick ="mute(this)" id="muteBtn" value="muted" >🔇ミュート中</button>
   </div>
   <br><br><br><br><br>
   <div class="website-box2">
-    <input type="password" class=" correct-answer" id="correctAnswerInput" placeholder="正解" min="0" step="1"
+    <input type="password" class="correct-answer" id="correctAnswerInput" placeholder="正解" min="0" step="1"
       max="100"><br><br>
   </div>
 
