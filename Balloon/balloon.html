@@ -126,7 +126,7 @@
   <div class="grid-container">
     <div class="website-box">
       <button class="website-group default_text small_text" onclick="">Group A</button>
-      <div class="health-text large_text shadow" id="health-text-1">200</div>
+      <div class="health-text large_text shadow" id="health-text-1">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-1"></div>
       </div>
@@ -135,7 +135,7 @@
 
     <div class="website-box">
       <button class="website-group default_text small_text" onclick="">Group B</button>
-      <div class="health-text large_text shadow" id="health-text-2">200</div>
+      <div class="health-text large_text shadow" id="health-text-2">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-2"></div>
       </div>
@@ -144,7 +144,7 @@
 
     <div class="website-box">
       <button class="website-group default_text small_text" onclick="">Group C</button>
-      <div class="health-text large_text shadow" id="health-text-3">200</div>
+      <div class="health-text large_text shadow" id="health-text-3">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-3"></div>
       </div>
@@ -153,7 +153,7 @@
 
     <div class="website-box">
       <button class="website-group default_text small_text" onclick="">Group D</button>
-      <div class="health-text large_text shadow" id="health-text-4">200</div>
+      <div class="health-text large_text shadow" id="health-text-4">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-4"></div>
       </div>
@@ -162,7 +162,7 @@
 
     <div class="website-box">
       <button class="website-group default_text small_text" onclick="">Group E</button>
-      <div class="health-text large_text shadow" id="health-text-5">200</div>
+      <div class="health-text large_text shadow" id="health-text-5">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-5"></div>
       </div>
@@ -171,7 +171,7 @@
 
     <div class="website-box">
       <button class="website-group default_text small_text" onclick="">Group F</button>
-      <div class="health-text large_text shadow" id="health-text-6">200</div>
+      <div class="health-text large_text shadow" id="health-text-6">100</div>
       <div class="health-bar">
         <div class="current-health" id="health-bar-6"></div>
       </div>
@@ -216,6 +216,7 @@
     }
 
     let questionNumber = 0;
+    let startHealth = 200;
     let QAdict = {
       "2022年の国内向け新車販売台数、<br>トヨタ車のシェアは何%?":47,
       "日本の米の収穫量、<br>新潟県が占める割合、何%?":8,
@@ -267,10 +268,11 @@
     }
 
     const numHealthBars = 6;
-    let currentHealth = Array.from({ length: numHealthBars }, () => 200);
+    let currentHealth = Array.from({ length: numHealthBars }, () => startHealth);
+    updateHealthBars();
 
     function resetHealth() {
-      currentHealth = Array.from({ length: numHealthBars }, () => 200);
+      currentHealth = Array.from({ length: numHealthBars }, () => startHealth);
       updateHealthBars();
       questionNumber = 1;
       updateQuestionText()
@@ -311,7 +313,7 @@
       for (let i = 1; i <= numHealthBars; i++) {
         const healthBar = document.getElementById(`health-bar-${i}`);
         const healthNumber = document.getElementById(`health-text-${i}`);
-        healthBar.style.width = (currentHealth[i - 1] / 2) + '%';
+        healthBar.style.width = (currentHealth[i - 1] / (startHealth / 100)) + '%';
         healthNumber.textContent = currentHealth[i - 1];
         if (currentHealth[i - 1] <= 0) {
           healthNumber.style.color = "red";
