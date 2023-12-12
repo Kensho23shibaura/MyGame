@@ -52,7 +52,7 @@ function banner2(title,text,detail = text){
     p.innerHTML = txt;
     // p.style.fontSize = "30px";
     var time = document.createElement('div');
-    time.innerHTML = "Auto Close : 80 sec.";
+    time.innerHTML = "Thinking Time : 80 sec.";
     var cancel = document.createElement('button');
     cancel.innerHTML = "キャンセル";
     cancel.setAttribute("onclick","hideConfirm(this);");
@@ -62,7 +62,7 @@ function banner2(title,text,detail = text){
     okay.style.background = "#5566FF";
     //
     okay.setAttribute("onclick","hideConfirm2(this,"+fn+");");
-    okay.innerHTML  = "OK";
+    okay.innerHTML  = "Finish";
     div2.appendChild(h2);
     div2.appendChild(p);
     div2.appendChild(cancel);
@@ -73,7 +73,7 @@ function banner2(title,text,detail = text){
     if(popup=="hidden"){
       div2.appendChild(time);
       // console.log(time.innerHTML.replace(/[^0-9]/g,""));
-      var timeout = setInterval(function(time){time.innerHTML = "Auto Close : "+(parseInt(time.innerHTML.replace(/[^0-9]/g,""))-1)+" sec.";},1000,time);
+      var timeout = setInterval(function(time){time.innerHTML = "Thinking Time : "+(parseInt(time.innerHTML.replace(/[^0-9]/g,""))-1)+" sec.";},1000,time);
       setTimeout(function(div1,timeout){clearInterval(timeout);console.log(div1);div1.remove(div1);},81000,div1,timeout);
     }
   }
