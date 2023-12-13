@@ -14,8 +14,8 @@
 <span id="Realtime"class="time">00/00(0) 00:00:00</span><br><br>
 <button class="reload" onclick="location.reload();">⇄</button><br>
 <span class="order">受付番号：<span id="No"> 001</span></span>
-<button class="set" onclick="set()" id="set">銀河セット</button><span class="all">
-<button class="pm longsub0" id="sub0">-</button>ALL<button type="button" class="pm longadd0" id="add0">+</button>
+<!-- <button class="set" onclick="set()" id="set">銀河セット</button><span class="all">
+<button class="pm longsub0" id="sub0">-</button>ALL<button type="button" class="pm longadd0" id="add0">+</button> -->
 </span><br><br><br>
 <!-- <table class="Product"><tr>
     <td><button class="image" onclick="add(0)" id="menu1"><img src="img/menu1.jpg" class="photo">プレーン</button></td>
@@ -88,7 +88,7 @@
 }
 html {touch-action: manipulation;}
 body{background-color:black;}
-body{background-image:url("img/back.jpg");background-size:cover;}
+/* body{background-image:url("img/back.jpg");background-size:cover;} */
 body{color:#000; font-family:"Gulim",sans-serif; font-weight:600;}
 body{text-shadow:1px 1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff,-1px -1px 0 #fff;}
 
@@ -223,6 +223,7 @@ body{text-shadow:1px 1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff,-1px -1px 0 #fff
 .delete:hover{background:#ef1f12;}
 .reload:hover{background:#ef9500;}
 
+/*
 .pm:active,
 .pmi:active,
 .tp:active,
@@ -238,13 +239,14 @@ body{text-shadow:1px 1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff,-1px -1px 0 #fff
   transform:translateY(2px);
   box-shadow:0px 0px 1px rgba(0,0,0,0.2);
   border-bottom:none;
-}
+}*/
 
 .grid-container {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(1, 1fr);
+      grid-template-rows: repeat(2, 1fr);
       gap: 5px;
+      width: 80vw;
     }
 
     .website-box {
@@ -340,39 +342,57 @@ body{text-shadow:1px 1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff,-1px -1px 0 #fff
 //   </div>
 
 
-function addItem(No,name){
+function addItem(No,Name,img_URL){
     //タイトル、本文、(デフォルト=10秒閉じ,noClose=自動で閉じないアラート,その他＝confirm),関数ー＞""で囲む,Okayに渡される
     var div1 = document.createElement('div');
     div1.className = "website-box";
 
-    var div2 = document.createElement('div');
-    div2.innerHTML = `Set ${No}`;
+    var upper_div = document.createElement('div');
+    upper_div.style.width = '100%';
+    upper_div.style.height = '80%';
 
-    var img = document.createElement('button');
-    img.innerHTML = name;
+    var div2 = document.createElement('div');
+    div2.innerHTML = `Set ${No} ${Name}`;
+
+    var img = document.createElement('div');
+    img.style.backgroundImage = `url("${img_URL}")`;
+    img.style.width = '100%';
+    img.style.height = '80%';
+    img.style.backgroundSize = 'cover';
+    // img.src = img_URL;
+    img.className = "photo";
     img.setAttribute("onclick",`add(${No});`);
+
+
+    var lower_div = document.createElement('div');
+    lower_div.style.width = '100%';
+    lower_div.style.height = '20%';
 
     var subBtn = document.createElement('button');
     subBtn.innerHTML = '-';
-    subBtn.className = `pm longsub${No}`;
+    subBtn.className = `pm`;
     subBtn.id = `sub${No}`;
     subBtn.setAttribute("onclick",`sub(${No});`);
 
-    var span = document.createElement('div');
-    span.className = `qt number${No}`;
-    span.innerHTML = "0";
+    var value = document.createElement('div');
+    value.className = `qt`;
+    value.innerHTML = "0";
 
     var addBtn = document.createElement('button');
     addBtn.innerHTML = '+';
-    addBtn.className = `pm longadd${No}`;
+    addBtn.className = `pm`;
     addBtn.id = `add${No}`;
     addBtn.setAttribute("onclick",`add(${No});`);
 
-    div1.appendChild(div2);
-    div1.appendChild(img);
-    div1.appendChild(subBtn);
-    div1.appendChild(span);
-    div1.appendChild(addBtn);
+    upper_div.appendChild(div2);
+    upper_div.appendChild(img);
+
+    lower_div.appendChild(subBtn);
+    lower_div.appendChild(value);
+    lower_div.appendChild(addBtn);
+
+    div1.appendChild(upper_div);
+    div1.appendChild(lower_div);
 
 
     // var p = document.createElement('p');
@@ -405,8 +425,12 @@ function addItem(No,name){
     // }
   }
 
-  addItem(0,"プレーン");
-  addItem(1,"ぶどう");
+  addItem(0,"プレーン","img/menu6.jpg");
+  addItem(1,"ぶどう","img/menu6.jpg");
+  addItem(2,"プレーン","img/menu6.jpg");
+  addItem(3,"ぶどう","img/menu6.jpg");
+  addItem(4,"プレーン","img/menu6.jpg");
+  addItem(5,"ぶどう","img/menu6.jpg");
 
 function set2fig(num){
   var ret;
