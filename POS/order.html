@@ -1,9 +1,12 @@
 <!DOCTYPE html><html lang="ja"><head><meta charset="utf-8">
   <link rel="apple-touch-icon" href="img/order.PNG" />
-  <script type="text/javascript" src="taq.js"></script>
-  <script type="text/javascript" src="order.js"></script>
-  <link rel="stylesheet" href="taq.css" type="text/css">
-  <link rel="stylesheet" href="order.css" type="text/css">
+  <!-- <script type="text/javascript" src="taq.js"></script> -->
+  <!-- <script type="text/javascript" src="order.js"></script> -->
+  <!-- <link rel="stylesheet" href="taq.css" type="text/css"> -->
+  <!-- <link rel="stylesheet" href="order.css" type="text/css"> -->
+  <script type="text/javascript" src="./../util/popup.js"></script>
+  <link rel="stylesheet" href="./../util/default.css" type="text/css">
+  <link rel="stylesheet" href="./../util/popup.css" type="text/css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -14,7 +17,7 @@
 <button class="set" onclick="set()" id="set">銀河セット</button><span class="all">
 <button class="pm longsub0" id="sub0">-</button>ALL<button type="button" class="pm longadd0" id="add0">+</button>
 </span><br><br><br>
-<table class="Product"><tr>
+<!-- <table class="Product"><tr>
     <td><button class="image" onclick="add(0)" id="menu1"><img src="img/menu1.jpg" class="photo">プレーン</button></td>
     <td><button class="image" onclick="add(1)" id="menu2"><img src="img/menu2.jpg" class="photo">ココア</button></td>
     <td><button class="image" onclick="add(2)" id="menu3"><img src="img/menu3.jpg" class="photo">抹茶</button></td>
@@ -24,7 +27,7 @@
     <td><button class="pm longsub2" id="sub2">-</button> <span class="qt number2">0</span> <button class="pm longadd2" id="add2">+</button></td>
     <td><button class="pm longsub3" id="sub3">-</button> <span class="qt number3">0</span> <button class="pm longadd3" id="add3">+</button></td>
     <td><button class="tp"onclick="onoff1()">なし/あり</button></td>
-</tr></table><br>
+</tr></table><br> -->
 <span class="sum">計 <span id="sum1">0</span> 個 <span id="sum2">000</span> 円</span><br>
 <button class="reset" onclick="resetNo()">リセット</button>
 <button type="submit" class="submit" onclick="orderNo()">注文確定</button>
@@ -42,29 +45,217 @@
     <button class="popup" onclick="popup()"><span id="soldbutton">編集</span></button>
 </div>
 
-<!---追加項目選択画面ここから-->
-<div id="service_area">
-  <table class="servise_table"><tr>
-    <td><button class="image" onclick="add(0)" id="menu1"><img src="img/menu1.jpg" class="photo">プレーン</button></td>
-    <td><button class="image" onclick="add(1)" id="menu2"><img src="img/menu2.jpg" class="photo">ココア</button></td>
-    <td><button class="image" onclick="add(2)" id="menu3"><img src="img/menu3.jpg" class="photo">抹茶</button></td>
-  </tr><tr>
-    <td><span class="qt number1">0</span></td>
-    <td><span class="qt number2">0</span></td>
-    <td><span class="qt number3">0</span></td>
-  </tr></table>
+<div class="grid-container">
+  <!-- <div class="website-box">
+    <button class="website-group default_text small_text" onclick="">Set A</button><br>
+    <button class="image" onclick="add(0)" id="menu1"><img src="img/menu1.jpg" class="photo">プレーン</button><br>
+    <button class="pm longsub1" id="sub1">-</button><span class="qt number1">0</span> <button class="pm longadd1" id="add1">+</button>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group default_text small_text" onclick="">Set B</button><br>
+    <button class="image" onclick="add(1)" id="menu2"><img src="img/menu2.jpg" class="photo">プレーン</button><br>
+    <button class="pm longsub2" id="sub2">-</button><span class="qt number2">0</span> <button class="pm longadd2" id="add2">+</button>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group default_text small_text" onclick="">Set C</button><br>
+    <button class="image" onclick="add(2)" id="menu3"><img src="img/menu3.jpg" class="photo">プレーン</button><br>
+    <button class="pm longsub3" id="sub3">-</button><span class="qt number3">0</span> <button class="pm longadd3" id="add3">+</button>
+  </div>
+
+  <div class="website-box">
+    <button class="website-group default_text small_text" onclick="">Set D</button><br>
+    <button class="image" onclick="add(3)" id="menu4"><img src="img/menu4.jpg" class="photo">プレーン</button><br>
+    <button class="pm longsub4" id="sub4">-</button><span class="qt number4">0</span> <button class="pm longadd4" id="add4">+</button>
+  </div> -->
 </div>
-<!---追加項目選択画面ここまで-->
 
 <!--ロードアイコン-->
-<div class="bg" id="loadicon">
+<!-- <div class="bg" id="loadicon">
   <div class="loading">
     <p>データベース接続中...</p>
     <div class="way"><div class="round">●</div></div>
     <button onclick="location.reload();">再読み込み</button>
   </div>
-</div>
+</div> -->
 <style>
+
+*{
+  -webkit-tap-highlight-color:rgba(0,0,0,0);
+  -webkit-touch-callout:none;
+  /* -webkit-user-select:none; */
+}
+html {touch-action: manipulation;}
+body{background-color:black;}
+body{background-image:url("img/back.jpg");background-size:cover;}
+body{color:#000; font-family:"Gulim",sans-serif; font-weight:600;}
+body{text-shadow:1px 1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff,-1px -1px 0 #fff;}
+
+.time{
+  position:fixed;
+  font-size:100%;
+  top:5%;
+  left:40px;
+  z-index:5;
+}
+.reload{
+  position:fixed;
+  font-size:80%;
+  top:5%;
+  right:70px;
+  z-index:5;
+  display:inline-block;
+  text-decoration:none;
+  border-bottom:solid 4px #627295;
+  color:#000;
+  font-weight:600;
+  text-align:center;
+  vertical-align:middle;
+  text-shadow:1px 1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff,-1px -1px 0 #fff;
+  border-radius:5px;
+  padding:1px;
+  height:25px;
+  width:25%;
+}
+
+@media screen and (min-width:900px){/*横画面用*/
+
+}
+
+@media screen and (max-width:600px){/*pro split 700?*/
+  .time{top:3%;}
+  .reload{top:3%;}
+}
+
+.set,
+.all,
+.cmp,
+.notcmp,
+.back,
+.image,
+.pm,
+.tp,
+.popup,.popdown,/**/
+.reset,
+.monitor,
+.submit{
+  display:inline-block;
+  text-decoration:none;
+  border-bottom:solid 4px #627295;
+  color:#000;
+  font-weight:600;
+  text-align:center;
+  vertical-align:middle;
+  text-shadow:1px 1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff,-1px -1px 0 #fff;
+}
+
+.order{left:5%; top:10%;}
+.set{left:45%; top:10%;}
+.all{right:10%; top:10%;}
+.cmp{right:20%; top:3%;}
+.notcmp{right:35%; top:3%;}
+.back{right:5%; top:3%;}
+.Product{top:25%;}
+.sum{right:10%; bottom:20%;}
+.reset{left:15%; bottom:5%;}
+.submit{right:15%; bottom:5%;}
+
+.order{font-size:200%;}
+.monitor{font-size:200%;}
+.set{font-size:60%;}
+.all{font-size:120%;}
+.image{font-size:100%;}
+.pm{font-size:120%;}
+.tp{font-size:75%;}
+.sum{font-size:200%;}
+.reset{font-size:120%;}
+.submit{font-size:120%;}
+
+.set{width:20%;}
+.monitor{width: 50%}
+.all{width:15%;}
+.image{width:75%;}
+.pm{width:30px; height:30px;}
+.tp{width:80px; height:25px;}
+.reset{width:25%;}
+.cmp{height:30px;}
+.notcmp{height:30px;}
+.back{height:30px;}
+.submit{width:25%;}
+.photo{width:95%;}
+
+.set{border-radius:5px;}
+.image{border-radius:5%}
+.pm{border-radius:100%;}
+.tp{border-radius:10%;}
+.cmp{border-radius:5px;}
+.notcmp{border-radius:5px;}
+.back{border-radius:5px;}
+.reset{border-radius:5px;}
+.submit{border-radius:5px;}
+
+.order,.set,.all,.Product,.sum,.reset,.submit,.monitor{margin:1%;}
+.set,.reset,.submit,.monitor{padding:10px;}
+.image{padding:0.5em 1em;}
+
+.reload{background:#ffa500;}
+.pm{background:#a9e54d;}
+.tp{background:#a9e54d;}
+.set{background:#ffa500;}
+.image{background:#ffff00;}
+.reset{background:#ff2f22;}
+.submit{background:#3a5ee7;}
+.cmp{background:#3a5ee7;}
+.notcmp{background:#ff2f22;}
+.back{background:#00552e;}
+.delete{background:#ff2f22;}
+
+.pm:hover{background:#99d53d;}
+.pmi:hover{background:#99d53d;}
+.tp:hover{background:#99d53d;}
+.set:hover{background:#ef9500;}
+.image:hover{background:#efef00;}
+.reset:hover{background:#ef1f12;}
+.submit:hover{background:#2a4ed7;}
+.cmp:hover{background:#2a4ed7;}
+.notcmp:hover{background:#ef1f12;}
+.delete:hover{background:#ef1f12;}
+.reload:hover{background:#ef9500;}
+
+.pm:active,
+.pmi:active,
+.tp:active,
+.set:active,
+.image:active,
+.reset:active,
+.submit:active,
+.cmp:active,
+.notcmp:active,
+.delete:active,
+.reload:active{
+  -webkit-transform:translateY(2px);
+  transform:translateY(2px);
+  box-shadow:0px 0px 1px rgba(0,0,0,0.2);
+  border-bottom:none;
+}
+
+.grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(1, 1fr);
+      gap: 5px;
+    }
+
+    .website-box {
+      position: relative;
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 45vh;
+      text-align: center;
+      background-color: rgba(58, 94, 231, 0.8);
+    }
+
   .bg{
     position:fixed;
     top:0px;
@@ -98,8 +289,6 @@
     width:100%;
     height:80px;
     vertical-align: middle;
-  }
-  .round{
   }
   .round{
     animation: animation-dash 5s ease-in-out 0s infinite normal;
@@ -142,9 +331,148 @@
 </style>
 
 <script>
+
+// <div class="grid-container">
+//   <div class="website-box">
+//     <button class="website-group default_text small_text" onclick="">Set A</button><br>
+//     <button class="image" onclick="add(0)" id="menu1"><img src="img/menu1.jpg" class="photo">プレーン</button><br>
+//     <button class="pm longsub1" id="sub1">-</button><span class="qt number1">0</span> <button class="pm longadd1" id="add1">+</button>
+//   </div>
+
+
+function addItem(No,name){
+    //タイトル、本文、(デフォルト=10秒閉じ,noClose=自動で閉じないアラート,その他＝confirm),関数ー＞""で囲む,Okayに渡される
+    var div1 = document.createElement('div');
+    div1.className = "website-box";
+
+    var div2 = document.createElement('div');
+    div2.innerHTML = `Set ${No}`;
+
+    var img = document.createElement('button');
+    img.innerHTML = name;
+    img.setAttribute("onclick",`add(${No});`);
+
+    var subBtn = document.createElement('button');
+    subBtn.innerHTML = '-';
+    subBtn.className = `pm longsub${No}`;
+    subBtn.id = `sub${No}`;
+    subBtn.setAttribute("onclick",`sub(${No});`);
+
+    var span = document.createElement('div');
+    span.className = `qt number${No}`;
+    span.innerHTML = "0";
+
+    var addBtn = document.createElement('button');
+    addBtn.innerHTML = '+';
+    addBtn.className = `pm longadd${No}`;
+    addBtn.id = `add${No}`;
+    addBtn.setAttribute("onclick",`add(${No});`);
+
+    div1.appendChild(div2);
+    div1.appendChild(img);
+    div1.appendChild(subBtn);
+    div1.appendChild(span);
+    div1.appendChild(addBtn);
+
+
+    // var p = document.createElement('p');
+    // p.innerHTML = txt;
+    // // p.style.fontSize = "30px";
+    // var time = document.createElement('div');
+    // time.innerHTML = "Thinking Time : 80 sec.";
+    // var cancel = document.createElement('button');
+    // cancel.innerHTML = "キャンセル";
+    // cancel.setAttribute("onclick","hideConfirm(this);");
+    // if(popup==("hidden"))cancel.style.visibility="hidden";
+    // if(popup==("noClose"))cancel.style.visibility="hidden";
+    // var okay = document.createElement('button');
+    // okay.style.background = "#5566FF";
+    // //
+    // okay.setAttribute("onclick","hideConfirm2(this,"+fn+");");
+    // okay.innerHTML  = "Finish";
+    // div2.appendChild(h2);
+    // div2.appendChild(p);
+    // div2.appendChild(cancel);
+    // div2.appendChild(okay);
+    // div1.appendChild(div2);
+    document.getElementsByClassName('grid-container')[0].appendChild(div1);
+    // // console.log();
+    // if(popup=="hidden"){
+    //   div2.appendChild(time);
+    //   // console.log(time.innerHTML.replace(/[^0-9]/g,""));
+    //   var timeout = setInterval(function(time){time.innerHTML = "Thinking Time : "+(parseInt(time.innerHTML.replace(/[^0-9]/g,""))-1)+" sec.";},1000,time);
+    //   setTimeout(function(div1,timeout){clearInterval(timeout);console.log(div1);div1.remove(div1);},81000,div1,timeout);
+    // }
+  }
+
+  addItem(0,"プレーン");
+  addItem(1,"ぶどう");
+
+function set2fig(num){
+  var ret;
+  if(num<10){ret="0"+num;}
+    else{ret=num;}
+  return ret;
+}
+function set3fig(num){
+  var ret;
+  if(num<10){ret=" 00"+num;}
+   else if(num<100){ret=" 0"+num;}
+    else{ret=" "+num;}
+  return ret;
+}
+
+function showClock(){
+  var nowTime=new Date();
+  var nowHour=set2fig(nowTime.getHours());
+  var nowMin=set2fig(nowTime.getMinutes());
+  var nowSec=set2fig(nowTime.getSeconds());
+  var nowMonth=set2fig(nowTime.getMonth()+1);
+  var nowDate=set2fig(nowTime.getDate());
+  var wDay=nowTime.getDay();
+  var Day=['日','月','火','水','木','金','土'];
+  var Realtime=nowMonth+"/"+nowDate+"("+Day[wDay]+")"+" "+nowHour+":"+nowMin+":"+nowSec;
+  document.getElementById("Realtime").innerHTML=Realtime;
+}
+
+var img=new Array();
+var cnt1=3;
+
+img[0]=new Image();
+img[0].src="img/menu1.jpg"
+img[1]=new Image();
+img[1].src="img/menu2.jpg"
+img[2]=new Image();
+img[2].src="img/menu3.jpg"
+img[3]=new Image();
+img[3].src="img/menu4.jpg"
+img[4]=new Image();
+img[4].src="img/menu5.jpg"
+
+function add(num){
+  var qt=document.getElementsByClassName('qt');
+  var sum1=document.getElementById('sum1');
+  var sum2=document.getElementById('sum2');
+  qt[num].innerHTML++;
+  sum1.innerHTML++;
+  sum2.innerHTML=set3fig(parseInt(sum1.innerHTML)*50);
+}
+function sub(num){
+  var qt=document.getElementsByClassName('qt');
+  var sum1=document.getElementById('sum1');
+  var sum2=document.getElementById('sum2');
+  if(parseInt(qt[num].innerHTML)>0){
+  qt[num].innerHTML--;
+  sum1.innerHTML--;}
+  sum2.innerHTML=set3fig(parseInt(sum1.innerHTML)*50);
+}
+
+function addqta(){for(var i=0;i<3;i++){add(i);}}
+function subqta(){for(var i=0;i<3;i++){sub(i);}}
+
 socket = io.connect('https://socket.taq-system.tk',{query:{"type":"送信"}});
 
-var No=001;
+var No="001";
 
 setInterval('showClock()',1000);
 
@@ -469,18 +797,6 @@ window.onload=popdown();
   .Product,.order,.sum,.all{background-color:rgba(256,256,256,0.5);}
 
   .reload{right:1%; top:1%; width:25px;}
-/*
-  @media screen and (max-width:900px){
-    .set{width:15%; font-size:55%;}
-    .set{left:50%;}
-    .image{font-size:90%; width:75%;}
-    .pm{width:25px; height:25px; font-size:100%;}
-    .order,.sum{font-size:160%;}
-    .all{font-size:90%;}
-    .all{width:20%;}
-    .photo{width:90%;}
-
-  }*/
 </style>
 
 </body></html>
