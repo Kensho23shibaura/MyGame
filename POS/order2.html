@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <script type="text/javascript" src="./../util/popup.js"></script>
+    <script type="text/javascript" src="./../util/timer.js"></script>
     <link rel="stylesheet" href="./../util/default.css" type="text/css">
     <link rel="stylesheet" href="./../util/popup.css" type="text/css">
     <link rel="stylesheet" href="./../util/scrollbar.css" type="text/css">
@@ -13,41 +14,48 @@
 
 <body>
     <div id="Area_Top">
-        <div class="Item_Top">Top?</div>
-        <div class="Item_Top">履歴?</div>
-        <div class="Item_Top">time?</div>
-        <div class="Item_Top">date?</div>
+        <div id="showClock" class="default_text small_text shadow"></div>
+        <button id="checkOrder" class="Top_Button default_text small_text" onclick="">注文履歴(未)</button>
+        <button id="finishOrder" class="Top_Button default_text small_text"
+            onclick="showAlert('','お会計してよろしいですか?','confirm','')">お会計(未)</button>
     </div>
-    <div id="Area_Tab">
-        <div class="Item_Tab">
-            <button class="Tab_Button" onclick="showTab('MenuA')">MenuA</button>
-        </div>
-        <div class="Item_Tab">
-            <button class="Tab_Button" onclick="showTab('MenuB')">MenuB</button>
-        </div>
-        <div class="Item_Tab">
-            <button class="Tab_Button" onclick="showTab('MenuC')">MenuC</button>
-        </div>
-        <div class="Item_Tab">
-            <button class="Tab_Button" onclick="showTab('MenuD')">MenuD</button>
-        </div>
-    </div>
+    <div id="Area_Tab"></div>
     <div id="Area_MenuA" class="Area_Menu"></div>
     <div id="Area_MenuB" class="Area_Menu" style="display: none;"></div>
     <div id="Area_MenuC" class="Area_Menu" style="display: none;"></div>
     <div id="Area_MenuD" class="Area_Menu" style="display: none;"></div>
-    <div id="Area_Confirm">
-        <div class="Item_Tab">
-            <button class="" onclick="resetConfirm()">リセット</button>
-            <button class="" onclick="resetConfirm()">送信(リセット)</button>
-            Confirm
-            Sum
-        </div>
+    <div id="Area_Confirm_Text" class="default_text small_text shadow">注文確認</div>
+    <div id="Area_Confirm"></div>
+    <div id="Area_Operate">
+        <button class="Operate_Button default_text small_text"
+            onclick="showAlert('','初期化してよろしいですか?','confirm','resetConfirm()')">リセット</button>
+        <button class="Operate_Button default_text small_text"
+            onclick="showAlert('','注文を確定してよろしいですか?','confirm','')">注文確定(未)</button>
     </div>
 
     <style>
+        :root {
+            /*Item_Tabの最大数*/
+            --tab-amount: 5;
+            /*Item_Menuを横に並べる最大数*/
+            --item-max-amount: 4;
+            /*色指定*/
+            --use-color-a1: rgba(36, 50, 80, 1.0);
+            --use-color-a2: rgba(36, 50, 80, 0.9);
+            --use-color-a3: rgba(36, 50, 80, 0.5);
+            --use-color-b1: rgba(88, 94, 170, 0.8);
+            --use-color-c1: rgba(101, 154, 210, 0.7);
+        }
+
         body {
             background-color: black;
+            background-image: url("img/back.jpg");
+            background-size: cover;
+            user-select: none;
+        }
+
+        #showClock {
+            width: 15vw;
         }
 
         #Area_Top {
@@ -61,7 +69,7 @@
 
         #Area_Tab {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(var(--tab-amount), 1fr);
             gap: 5px;
             position: absolute;
             top: 6vh;
@@ -72,7 +80,7 @@
 
         .Area_Menu {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(var(--item-max-amount), 1fr);
             grid-template-rows: repeat(2, 1fr);
             gap: 5px;
             position: absolute;
@@ -84,55 +92,104 @@
             overflow-y: hidden;
         }
 
+        #Area_Operate {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3px;
+            position: absolute;
+            top: 85vh;
+            left: 80vw;
+            width: calc(18vw - 6px);
+            height: calc(10vh - 6px);
+            padding: 3px;
+        }
+
+        #Area_Confirm_Text {
+            position: absolute;
+            top: 15vh;
+            left: 80vw;
+            width: calc(18vw - 6px);
+            height: calc(5vh - 6px);
+            padding: 3px;
+        }
+
         #Area_Confirm {
             display: grid;
             grid-template-rows: repeat(6, 1fr);
-            gap: 5px;
+            gap: 3px;
             position: absolute;
-            top: 14vh;
+            top: 20vh;
             left: 80vw;
-            width: 20vw;
-            height: 86vh;
+            width: calc(18vw - 6px);
+            height: calc(65vh - 6px);
+            padding: 3px;
             overflow-x: hidden;
             overflow-y: scroll;
         }
 
-        #Area_Top {
-            background-color: white;
-        }
-
         #Area_Tab {
-            background-color: darkgreen;
+            background-color: var(--use-color-a3);
+            border-top: 3px solid var(--use-color-a1);
+            border-bottom: 3px solid var(--use-color-a1);
         }
 
+        #Area_Operate,
+        #Area_Confirm_Text,
         #Area_Confirm {
-            background-color: darkred;
-        }
-
-        .Item_Top {
-            background-color: white;
-            margin: 5px;
+            background-color: var(--use-color-c1);
         }
 
         .Item_Tab {
-            background-color: green;
             margin: 5px;
         }
 
         .Item_Menu {
-            background-color: rgba(58, 94, 231, 0.8);
-            /* background-color: rgba(47, 74, 145, 0.8); */
+            background-color: var(--use-color-b1);
             margin: 5px;
             width: 25vw;
             border-radius: 30px;
+            border: solid 3px var(--use-color-a1);
         }
 
         .Item_Confirm {
-            background-color: red;
-            margin: 5px;
+            background-color: var(--use-color-b1);
             height: 10vh;
             border-radius: 30px;
+            border: solid 3px var(--use-color-a1);
             display: flex;
+        }
+
+        .Top_Button,
+        .Tab_Button,
+        .Operate_Button {
+            width: 100%;
+            height: 100%;
+            background-color: var(--use-color-a2);
+            border-radius: 20px;
+            color: white;
+            border: solid 3px white;
+        }
+
+        #checkOrder {
+            width: 10vw;
+            height: 80%;
+            position: absolute;
+            top: 10%;
+            left: 77vw;
+        }
+
+        #finishOrder {
+            width: 10vw;
+            height: 80%;
+            position: absolute;
+            top: 10%;
+            left: 88vw;
+        }
+
+        .Top_Button:hover,
+        .Tab_Button:hover,
+        .Operate_Button:hover {
+            background-color: var(--use-color-c1);
         }
 
         .upper_div {
@@ -145,13 +202,8 @@
             height: 30%;
         }
 
-        .lefter_div {
-            width: 50%;
-            height: 100%;
-        }
-
-        .righter_div {
-            width: 50%;
+        .sidehalf_div {
+            width: 45%;
             height: 100%;
         }
 
@@ -159,7 +211,14 @@
             width: 100%;
             height: 100%;
             background-size: cover;
-            border-radius: 30px;
+        }
+
+        .Menu_ImgMenu {
+            border-radius: 30px 30px 0px 0px;
+        }
+
+        .Menu_ImgConfirm {
+            border-radius: 30px 0px 0px 30px;
         }
 
         .Menu_Title {
@@ -170,47 +229,86 @@
 
         .Menu_Operate {
             display: flex;
-            padding-left: 30%;
-            padding-right: 30%;
+            position: relative;
+            width: 100%;
+            bottom: 30%;
+            left: 50%;
+            transform: translate(-50%, 70%);
         }
 
         .Menu_Value {
-            width: 20%;
+            width: calc(40% - 35px);
         }
 
         .pmBtn {
-            background: rgba(55, 55, 55, 0.9);
+            background: var(--use-color-a2);
             border-radius: 20px;
             color: white;
             width: 35px;
             height: 35px;
-            margin-right: 10%;
-            margin-left: 10%;
             text-shadow: none;
             text-align: center;
             border: solid 3px white;
+        }
+
+        .mBtn {
+            margin-right: 10%;
+            margin-left: 20%;
+        }
+
+        .pBtn {
+            margin-right: 20%;
+            margin-left: 10%;
         }
     </style>
 
     <script>
 
-        function addItem(Type = "Menu", No, Tab = "A", Name = "Menu", Price = 0, Img_URL = "img/sample.jpg") {
+        const TabList = [
+            { type: "Tab", No: 0, tab: "A", name: "Menu TabA" },
+            { type: "Tab", No: 1, tab: "B", name: "Menu TabB" },
+            { type: "Tab", No: 2, tab: "C", name: "Menu TabC" },
+            { type: "Tab", No: 3, tab: "D", name: "Menu TabD" },
+        ]
+        const ItemList = [
+            { type: "Menu", No: 0, tab: "A", name: "さくらんぼ", price: 100, img: "img/menuA.jpg" },
+            { type: "Menu", No: 1, tab: "A", name: "いちご", price: 100, img: "img/menuA.jpg" },
+            { type: "Menu", No: 2, tab: "A", name: "ぶどう", price: 100, img: "img/menuA.jpg" },
+            { type: "Menu", No: 3, tab: "A", name: "デコポン", price: 100, img: "img/menuA.jpg" },
+            { type: "Menu", No: 4, tab: "A", name: "かき", price: 100, img: "img/menuA.jpg" },
+            { type: "Menu", No: 5, tab: "A", name: "りんご", price: 100, img: "img/menuA.jpg" },
+            { type: "Menu", No: 6, tab: "B", name: "なし", price: 100, img: "img/menuB.jpg" },
+            { type: "Menu", No: 7, tab: "B", name: "もも", price: 100, img: "img/menuB.jpg" },
+            { type: "Menu", No: 8, tab: "B", name: "パイナップル", price: 100, img: "img/menuB.jpg" },
+            { type: "Menu", No: 9, tab: "C", name: "メロン", price: 100, img: "img/menuC.jpg" },
+            { type: "Menu", No: 10, tab: "C", name: "スイカ", price: 100, img: "img/menuC.jpg" },
+        ]
+
+        setInterval('showClock("showClock")', 1000);
+
+        function addTab(Type = "Tab", No, Tab = "A", Name = "Menu TabA") {
+            var Item = document.createElement('div');
+            Item.className = `Item_${Type}`;
+
+            var tabBtn = document.createElement('button');
+            tabBtn.innerHTML = Name;
+            tabBtn.className = "Tab_Button default_text small_text";
+            tabBtn.setAttribute("onclick", `showTab('Menu${Tab}');`);
+
+            Item.appendChild(tabBtn);
+            document.getElementById("Area_Tab").appendChild(Item);
+        }
+
+        function addItem(Type = "Menu", No, Tab = "A", Name = "Menu", Price = 0, Img_URL = "") {
             var Item = document.createElement('div');
             Item.className = `Item_${Type}`;
 
             var div_1st = document.createElement('div');
             var div_2nd = document.createElement('div');
-            if (Type == "Menu") {
-                div_1st.className = "upper_div";
-                div_2nd.className = "lower_div";
-            } else if (Type == "Confirm") {
-                div_1st.className = "lefter_div";
-                div_2nd.className = "righter_div";
-            }
 
             var Img = document.createElement('div');
+            Img.className = `Menu_Img Menu_Img${Type}`;
             Img.style.backgroundImage = `url("${Img_URL}")`;
-            Img.className = "Menu_Img";
             Img.setAttribute("onclick", `add(${No});`);
 
             var Menu_Title = document.createElement('div');
@@ -222,13 +320,22 @@
 
             var subBtn = document.createElement('button');
             subBtn.innerHTML = '-';
-            subBtn.className = "pmBtn default_text small_text";
+            subBtn.className = "pmBtn mBtn default_text small_text";
             subBtn.id = `sub${No}`;
             subBtn.setAttribute("onclick", `sub(${No});`);
 
             var value = document.createElement('div');
             value.className = `${Type}_Value default_text middle_text Menu${No}`;
+
+            var addBtn = document.createElement('button');
+            addBtn.innerHTML = '+';
+            addBtn.className = "pmBtn pBtn default_text small_text";
+            addBtn.id = `add${No}`;
+            addBtn.setAttribute("onclick", `add(${No});`);
+
             if (Type == "Menu") {
+                div_1st.className = "upper_div";
+                div_2nd.className = "lower_div";
                 value.innerHTML = "0";
                 var observer = new MutationObserver(function (mutationsList, observer) {
                     for (var mutation of mutationsList) {
@@ -242,14 +349,10 @@
                 // MutationObserver を value 要素に対して設定
                 observer.observe(value, { childList: true, subtree: true });
             } else if (Type == "Confirm") {
+                div_1st.className = "sidehalf_div";
+                div_2nd.className = "sidehalf_div";
                 value.innerHTML = "1";
             }
-
-            var addBtn = document.createElement('button');
-            addBtn.innerHTML = '+';
-            addBtn.className = "pmBtn default_text small_text";
-            addBtn.id = `add${No}`;
-            addBtn.setAttribute("onclick", `add(${No});`);
 
             Menu_Operate.appendChild(subBtn);
             Menu_Operate.appendChild(value);
@@ -265,17 +368,15 @@
             document.getElementById(`Area_${Type}${Tab}`).appendChild(Item);
         }
 
-        addItem("Menu", 0, "A", "さくらんぼ", 100, "img/menu6.jpg");
-        addItem("Menu", 1, "A", "いちご", 100, "img/menu6.jpg");
-        addItem("Menu", 2, "A", "ぶどう", 100, "img/menu6.jpg");
-        addItem("Menu", 3, "A", "デコポン", 100, "img/menu6.jpg");
-        addItem("Menu", 4, "A", "かき", 100, "img/menu6.jpg");
-        addItem("Menu", 5, "A", "りんご", 100, "img/menu6.jpg");
-        addItem("Menu", 6, "A", "なし", 100, "img/menu6.jpg");
-        addItem("Menu", 7, "A", "もも", 100, "img/menu6.jpg");
-        addItem("Menu", 8, "A", "パイナップル", 100, "img/menu6.jpg");
-        addItem("Menu", 9, "A", "メロン", 100, "img/menu6.jpg");
-        addItem("Menu", 10, "A", "スイカ", 100, "img/menu6.jpg");
+        function loadItemList() {
+            for (var No = 0; No < TabList.length; No++) {
+                addTab("Tab", No, TabList[No].tab, TabList[No].name);
+            }
+            for (var No = 0; No < ItemList.length; No++) {
+                addItem("Menu", No, ItemList[No].tab, ItemList[No].name, ItemList[No].price, ItemList[No].img);
+            }
+        }
+        loadItemList()
 
         //タブ切り替え
         function showTab(Tab = "MenuA") {
