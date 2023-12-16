@@ -12,26 +12,37 @@
 </head>
 
 <body>
-    <div id="Area_top">
+    <div id="Area_Top">
         <div class="Item_Top">Top?</div>
         <div class="Item_Top">履歴?</div>
         <div class="Item_Top">time?</div>
         <div class="Item_Top">date?</div>
     </div>
     <div id="Area_Tab">
-        <div class="Item_Tab">Tab1</div>
-        <div class="Item_Tab">Tab2</div>
-        <div class="Item_Tab">Tab3</div>
-        <div class="Item_Tab">Tab4</div>
+        <div class="Item_Tab">
+            <button class="Tab_Button" onclick="showTab('MenuA')">MenuA</button>
+        </div>
+        <div class="Item_Tab">
+            <button class="Tab_Button" onclick="showTab('MenuB')">MenuB</button>
+        </div>
+        <div class="Item_Tab">
+            <button class="Tab_Button" onclick="showTab('MenuC')">MenuC</button>
+        </div>
+        <div class="Item_Tab">
+            <button class="Tab_Button" onclick="showTab('MenuD')">MenuD</button>
+        </div>
     </div>
-    <div id="Area_Menu"></div>
+    <div id="Area_MenuA" class="Area_Menu"></div>
+    <div id="Area_MenuB" class="Area_Menu" style="display: none;"></div>
+    <div id="Area_MenuC" class="Area_Menu" style="display: none;"></div>
+    <div id="Area_MenuD" class="Area_Menu" style="display: none;"></div>
     <div id="Area_Confirm">
-        Confirm
-        <!-- <div class="Item_Confirm">Menu01</div>
-        <div class="Item_Confirm">Menu02</div>
-        <div class="Item_Confirm">Menu03</div>
-        <div class="Item_Confirm">Menu04</div> -->
-        Sum Submit
+        <div class="Item_Tab">
+            <button class="" onclick="resetConfirm()">リセット</button>
+            <button class="" onclick="resetConfirm()">送信(リセット)</button>
+            Confirm
+            Sum
+        </div>
     </div>
 
     <style>
@@ -59,7 +70,7 @@
             height: 8vh;
         }
 
-        #Area_Menu {
+        .Area_Menu {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             grid-template-rows: repeat(2, 1fr);
@@ -82,6 +93,7 @@
             left: 80vw;
             width: 20vw;
             height: 86vh;
+            overflow-x: hidden;
             overflow-y: scroll;
         }
 
@@ -93,15 +105,11 @@
             background-color: darkgreen;
         }
 
-        /* #Area_Menu {
-            background-color: black;
-        } */
-
         #Area_Confirm {
             background-color: darkred;
         }
 
-        .Item_Tab {
+        .Item_Top {
             background-color: white;
             margin: 5px;
         }
@@ -136,6 +144,7 @@
             width: 100%;
             height: 30%;
         }
+
         .lefter_div {
             width: 50%;
             height: 100%;
@@ -184,15 +193,20 @@
     </style>
 
     <script>
-        function addItem_Menu(No, Name = "Menu", Price = 0, Img_URL) {
-            var Item_Menu = document.createElement('div');
-            Item_Menu.className = "Item_Menu";
 
-            var upper_div = document.createElement('div');
-            upper_div.className = "upper_div";
+        function addItem(Type = "Menu", No, Tab = "A", Name = "Menu", Price = 0, Img_URL = "img/sample.jpg") {
+            var Item = document.createElement('div');
+            Item.className = `Item_${Type}`;
 
-            var lower_div = document.createElement('div');
-            lower_div.className = "lower_div";
+            var div_1st = document.createElement('div');
+            var div_2nd = document.createElement('div');
+            if (Type == "Menu") {
+                div_1st.className = "upper_div";
+                div_2nd.className = "lower_div";
+            } else if (Type == "Confirm") {
+                div_1st.className = "lefter_div";
+                div_2nd.className = "righter_div";
+            }
 
             var Img = document.createElement('div');
             Img.style.backgroundImage = `url("${Img_URL}")`;
@@ -213,82 +227,23 @@
             subBtn.setAttribute("onclick", `sub(${No});`);
 
             var value = document.createElement('div');
-            value.className = `Menu_Value default_text middle_text Menu${No}`;
-            value.innerHTML = "0";
-            var old_value = value.innerHTML;
-            var observer = new MutationObserver(function (mutationsList, observer) {
-                for (var mutation of mutationsList) {
-                    if (mutation.type === 'childList' && old_value ==="0" && value.innerHTML === "1") {
-                        // value.innerHTMLが1に変わったときの処理
-                        addItem_Confirm(No, Name, Price, Img_URL);
-                        old_value = value.innerHTML;
+            value.className = `${Type}_Value default_text middle_text Menu${No}`;
+            if (Type == "Menu") {
+                value.innerHTML = "0";
+                var observer = new MutationObserver(function (mutationsList, observer) {
+                    for (var mutation of mutationsList) {
+                        var length = document.querySelectorAll(`.Confirm_Value.Menu${No}`).length;
+                        if (mutation.type === 'childList' && length === 0 && value.innerHTML === "1") {
+                            // value.innerHTMLが1に変わったときの処理
+                            addItem(Type = "Confirm", No, Tab = "", Name, Price, Img_URL);
+                        }
                     }
-                }
-            });
-
-            // MutationObserver を value 要素に対して設定
-            observer.observe(value, { childList: true, subtree: true });
-
-            var addBtn = document.createElement('button');
-            addBtn.innerHTML = '+';
-            addBtn.className = "pmBtn default_text small_text";
-            addBtn.id = `add${No}`;
-            addBtn.setAttribute("onclick", `add(${No});`);
-
-            Menu_Operate.appendChild(subBtn);
-            Menu_Operate.appendChild(value);
-            Menu_Operate.appendChild(addBtn);
-
-            upper_div.appendChild(Img);
-            lower_div.appendChild(Menu_Title);
-            lower_div.appendChild(Menu_Operate);
-
-            Item_Menu.appendChild(upper_div);
-            Item_Menu.appendChild(lower_div);
-
-            document.getElementById('Area_Menu').appendChild(Item_Menu);
-        }
-
-        addItem_Menu(0, "さくらんぼ", 100, "img/menu6.jpg");
-        addItem_Menu(1, "いちご", 100, "img/menu6.jpg");
-        addItem_Menu(2, "ぶどう", 100, "img/menu6.jpg");
-        addItem_Menu(3, "デコポン", 100, "img/menu6.jpg");
-        addItem_Menu(4, "かき", 100, "img/menu6.jpg");
-        addItem_Menu(5, "りんご", 100, "img/menu6.jpg");
-        addItem_Menu(6, "なし", 100, "img/menu6.jpg");
-
-        function addItem_Confirm(No, Name = "Menu", Price = 0, Img_URL) {
-            var Item_Confirm = document.createElement('div');
-            Item_Confirm.className = "Item_Confirm";
-
-            var upper_div = document.createElement('div');
-            upper_div.className = "lefter_div";
-
-            var lower_div = document.createElement('div');
-            lower_div.className = "righter_div";
-
-            var Img = document.createElement('div');
-            Img.style.backgroundImage = `url("${Img_URL}")`;
-            Img.className = "Menu_Img";
-            Img.setAttribute("onclick", `add(${No});`);
-
-            var Menu_Title = document.createElement('div');
-            Menu_Title.className = "Menu_Title default_text";
-            Menu_Title.innerHTML = Name;
-
-            var Menu_Operate = document.createElement('div');
-            Menu_Operate.className = "Menu_Operate";
-
-            var subBtn = document.createElement('button');
-            subBtn.innerHTML = '-';
-            subBtn.className = "pmBtn default_text small_text";
-            subBtn.id = `sub${No}`;
-            subBtn.setAttribute("onclick", `sub(${No});`);
-
-            var value = document.createElement('div');
-            value.className = `Confirm_Value default_text middle_text Menu${No}`;
-            // value.className = "Confirm_Value default_text middle_text";
-            value.innerHTML = "1";
+                });
+                // MutationObserver を value 要素に対して設定
+                observer.observe(value, { childList: true, subtree: true });
+            } else if (Type == "Confirm") {
+                value.innerHTML = "1";
+            }
 
             var addBtn = document.createElement('button');
             addBtn.innerHTML = '+';
@@ -300,22 +255,53 @@
             Menu_Operate.appendChild(value);
             Menu_Operate.appendChild(addBtn);
 
-            upper_div.appendChild(Img);
-            lower_div.appendChild(Menu_Title);
-            lower_div.appendChild(Menu_Operate);
+            div_1st.appendChild(Img);
+            div_2nd.appendChild(Menu_Title);
+            div_2nd.appendChild(Menu_Operate);
 
-            Item_Confirm.appendChild(upper_div);
-            Item_Confirm.appendChild(lower_div);
+            Item.appendChild(div_1st);
+            Item.appendChild(div_2nd);
 
-            document.getElementById('Area_Confirm').appendChild(Item_Confirm);
+            document.getElementById(`Area_${Type}${Tab}`).appendChild(Item);
         }
 
-        // addItem_Confirm(0, "プレーン", 100, "img/menu6.jpg");
-        // addItem_Confirm(1, "ぶどう", 100, "img/menu6.jpg");
-        // addItem_Confirm(2, "プレーン", 100, "img/menu6.jpg");
-        // addItem_Confirm(3, "ぶどう", 100, "img/menu6.jpg");
-        // addItem_Confirm(4, "プレーン", 100, "img/menu6.jpg");
-        // addItem_Confirm(5, "ぶどう", 100, "img/menu6.jpg");
+        addItem("Menu", 0, "A", "さくらんぼ", 100, "img/menu6.jpg");
+        addItem("Menu", 1, "A", "いちご", 100, "img/menu6.jpg");
+        addItem("Menu", 2, "A", "ぶどう", 100, "img/menu6.jpg");
+        addItem("Menu", 3, "A", "デコポン", 100, "img/menu6.jpg");
+        addItem("Menu", 4, "A", "かき", 100, "img/menu6.jpg");
+        addItem("Menu", 5, "A", "りんご", 100, "img/menu6.jpg");
+        addItem("Menu", 6, "A", "なし", 100, "img/menu6.jpg");
+        addItem("Menu", 7, "A", "もも", 100, "img/menu6.jpg");
+        addItem("Menu", 8, "A", "パイナップル", 100, "img/menu6.jpg");
+        addItem("Menu", 9, "A", "メロン", 100, "img/menu6.jpg");
+        addItem("Menu", 10, "A", "スイカ", 100, "img/menu6.jpg");
+
+        //タブ切り替え
+        function showTab(Tab = "MenuA") {
+            var Area_Menu = document.getElementsByClassName("Area_Menu");
+            Array.from(Area_Menu).forEach(function (element) {
+                element.style.display = 'none';
+            })
+            document.getElementById(`Area_${Tab}`).style.display = 'grid';
+        }
+
+        //Confirmの初期化
+        function resetConfirm() {
+            var Menu_Value = document.getElementsByClassName("Menu_Value");
+            var Confirm_Value = document.getElementsByClassName("Confirm_Value");
+            Array.from(Menu_Value).forEach(function (element) {
+                element.innerHTML = 0;
+            })
+            Array.from(Confirm_Value).forEach(function (element) {
+                element.innerHTML = 0;
+            })
+            var Area_Confirm = document.getElementById("Area_Confirm");
+            var Item_Confirm = document.getElementsByClassName("Item_Confirm");
+            Array.from(Item_Confirm).forEach(function (element) {
+                Area_Confirm.removeChild(element);
+            })
+        }
 
         // 数量の増減メソッド
         function add(No) {
@@ -331,14 +317,7 @@
                     element.innerHTML--;
                 }
             })
-            // var Menu_Value = document.getElementsByClassName('Menu_Value');
-            // var Confirm_Value = document.getElementsByClassName('Confirm_Value');
-            // if (parseInt(Menu_Value[num].innerHTML) > 0) {
-            //     Menu_Value[num].innerHTML--;
-            //     Confirm_Value[num].innerHTML--;
-            // }
         }
-
 
     </script>
 </body>
