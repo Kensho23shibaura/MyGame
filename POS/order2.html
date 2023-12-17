@@ -13,18 +13,18 @@
     <title>Order App</title>
 </head>
 
-<body>
+<body class="default_text">
     <div id="Area_Top">
-        <div id="showClock" class="default_text small_text shadow"></div>
+        <div id="showClock" class=" small_text shadow"></div>
         <button id="checkOrder" class="FullSize Btn default_text small_text"
             onclick="updateDisplay(['Area_History_Text', 'showHistory', 'Area_History'], 'grid')">注文履歴</button>
         <button id="finishOrder" class="FullSize Btn default_text small_text"
             onclick="showAlert('','お会計してよろしいですか?','confirm','finishOrder()')">お会計</button>
     </div>
     <div id="Area_Tab"></div>
-    <div id="Area_Confirm_Text" class="default_text small_text shadow">注文確認</div>
+    <div id="Area_Confirm_Text" class="small_text shadow">注文確認</div>
     <div id="Area_Confirm"></div>
-    <div id="Area_History_Text" class="default_text small_text shadow" style="display: none;">注文履歴</div>
+    <div id="Area_History_Text" class="small_text shadow" style="display: none;">注文履歴</div>
     <button id="showHistory" class="Btn default_text small_text"
         onclick="updateDisplay(['Area_History_Text', 'showHistory', 'Area_History'], 'none')" style="display: none;">×
         閉じる</button>
@@ -198,19 +198,19 @@
             height: 100%;
         }
 
-        #checkOrder {
-            width: 10vw;
-            height: 80%;
-            position: absolute;
-            top: 10%;
-            left: 77vw;
-        }
-
+        #checkOrder,
         #finishOrder {
             width: 10vw;
             height: 80%;
             position: absolute;
             top: 10%;
+        }
+
+        #checkOrder {
+            left: 77vw;
+        }
+
+        #finishOrder {
             left: 88vw;
         }
 
@@ -230,8 +230,6 @@
         }
 
         .Menu_Img {
-            width: 100%;
-            height: 100%;
             background-size: cover;
         }
 
@@ -361,14 +359,14 @@
             var div_2nd = document.createElement('div');
 
             var Img = document.createElement('div');
-            Img.className = `Menu_Img Menu_Img${Type}`;
+            Img.className = `Menu_Img FullSize Menu_Img${Type}`;
             Img.style.backgroundImage = `url("${Img_URL}")`;
             if (Type != "History") {
                 Img.setAttribute("onclick", `add(${No},["Menu_Value","Confirm_Value"]);`);
             }
 
             var Menu_Title = document.createElement('div');
-            Menu_Title.className = "Menu_Title default_text";
+            Menu_Title.className = "Menu_Title";
             Menu_Title.innerHTML = Name;
 
             var Menu_Operate = document.createElement('div');
@@ -381,7 +379,7 @@
             subBtn.setAttribute("onclick", `sub(${No},["Menu_Value","Confirm_Value"]);`);
 
             var value = document.createElement('div');
-            value.className = `${Type}_Value default_text middle_text Menu${No}`;
+            value.className = `${Type}_Value middle_text Menu${No}`;
 
             var addBtn = document.createElement('button');
             addBtn.innerHTML = '+';
@@ -557,7 +555,6 @@
         function add(No, Type) {
             var Menu_Value = document.getElementsByClassName(`Menu${No}`);
             Array.from(Menu_Value).forEach(function (element) {
-                console.log(element.classList);
                 var hasSameClass = Array.from(element.classList).some(function (className) {
                     return Array.from(Type).includes(className);
                 });
@@ -569,7 +566,6 @@
         function sub(No, Type) {
             var Menu_Value = document.getElementsByClassName(`Menu${No}`);
             Array.from(Menu_Value).forEach(function (element) {
-                console.log(element.classList);
                 var hasSameClass = Array.from(element.classList).some(function (className) {
                     return Array.from(Type).includes(className);
                 });
