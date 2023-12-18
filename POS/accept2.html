@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <script type="text/javascript" src="sample_db.js"></script>
     <script type="text/javascript" src="./../util/popup.js"></script>
     <script type="text/javascript" src="./../util/timer.js"></script>
     <script type="text/javascript" src="./../util/scrollbar.js"></script>
@@ -26,10 +27,12 @@
                 onclick="selectTab('Area_Show', 'Item_Tab', 'A');">注文順</button>
         </div>
         <div class="Item_Tab">
-            <button id="Item_TabB" class="FullSize Btn default_text small_text" onclick="selectTab('Area_Show', 'Item_Tab', 'B');">テーブル別</button>
+            <button id="Item_TabB" class="FullSize Btn default_text small_text"
+                onclick="selectTab('Area_Show', 'Item_Tab', 'B');">テーブル別</button>
         </div>
         <div class="Item_Tab">
-            <button id="Item_TabC" class="FullSize Btn default_text small_text" onclick="selectTab('Area_Show', 'Item_Tab', 'C');">アイテム別</button>
+            <button id="Item_TabC" class="FullSize Btn default_text small_text"
+                onclick="selectTab('Area_Show', 'Item_Tab', 'C');">アイテム別</button>
         </div>
     </div>
     <div id="Area_ShowA" class="Area_Show"></div>
@@ -109,6 +112,15 @@
             overflow-y: scroll;
         }
 
+        #Area_ShowD {
+            display: grid;
+            grid-template-rows: repeat(10, 1fr);
+            gap: 5px;
+            height: 80%;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
         #Area_Tab {
             background-color: var(--use-color-a3);
             border-top: 3px solid var(--use-color-a1);
@@ -128,6 +140,14 @@
         }
 
         .Item_ShowC {
+            background-color: var(--use-color-b1);
+            height: 10vh;
+            border-radius: 30px;
+            border: solid 3px var(--use-color-a1);
+            display: flex;
+        }
+
+        .Item_ShowD {
             background-color: var(--use-color-b1);
             height: 10vh;
             border-radius: 30px;
@@ -179,50 +199,19 @@
 
     <script>
 
-        const TableList = [
-            { order_id: 1, created_at: "2023/12/17 15:00:00" },
-            { order_id: 2, created_at: "2023/12/17 16:00:00" },
-            { order_id: 3, created_at: "2023/12/17 17:00:00" },
-            { order_id: 4, created_at: "2023/12/17 18:00:00" },
-            { order_id: 5, created_at: "2023/12/17 15:00:00" },
-            { order_id: 6, created_at: "2023/12/17 16:00:00" },
-            { order_id: 7, created_at: "2023/12/17 17:00:00" },
-            { order_id: 8, created_at: "2023/12/17 18:00:00" },
-            { order_id: 9, created_at: "2023/12/17 15:00:00" },
-            { order_id: 10, created_at: "2023/12/17 16:00:00" },
-            { order_id: 11, created_at: "2023/12/17 17:00:00" },
-            { order_id: 12, created_at: "2023/12/17 18:00:00" },
-        ]
-        const ItemList = [
-            { type: "ShowC", No: 0, tab: "", name: "さくらんぼ", price: 100, img: "img/menuA.jpg" },
-            { type: "ShowC", No: 1, tab: "", name: "いちご", price: 100, img: "img/menuA.jpg" },
-            { type: "ShowC", No: 2, tab: "", name: "ぶどう", price: 100, img: "img/menuA.jpg" },
-            { type: "ShowC", No: 3, tab: "", name: "デコポン", price: 100, img: "img/menuA.jpg" },
-            { type: "ShowC", No: 4, tab: "", name: "かき", price: 100, img: "img/menuA.jpg" },
-            { type: "ShowC", No: 5, tab: "", name: "りんご", price: 100, img: "img/menuA.jpg" },
-            { type: "ShowC", No: 6, tab: "", name: "なし", price: 100, img: "img/menuB.jpg" },
-            { type: "ShowC", No: 7, tab: "", name: "もも", price: 100, img: "img/menuB.jpg" },
-            { type: "ShowC", No: 8, tab: "", name: "パイナップル", price: 100, img: "img/menuB.jpg" },
-            { type: "ShowC", No: 9, tab: "", name: "メロン", price: 100, img: "img/menuC.jpg" },
-            { type: "ShowC", No: 10, tab: "", name: "スイカ", price: 100, img: "img/menuC.jpg" },
-        ]
-        const OrderList = [
-            { No: 0, order_id: 1, item_no: 0, name: "さくらんぼ", amount: 1, created_at: "2023/12/17 15:20:00", updated_at: "2023/12/17 15:20:00" },
-            { No: 1, order_id: 2, item_no: 1, name: "いちご", amount: 2, created_at: "2023/12/17 15:21:00", updated_at: "2023/12/17 15:21:00" },
-            { No: 2, order_id: 1, item_no: 4, name: "かき", amount: 3, created_at: "2023/12/17 15:23:00", updated_at: "2023/12/17 15:23:00" },
-            { No: 3, order_id: 4, item_no: 3, name: "デコポン", amount: 2, created_at: "2023/12/17 15:25:00", updated_at: "2023/12/17 15:27:00" },
-            { No: 4, order_id: 3, item_no: 1, name: "いちご", amount: 2, created_at: "2023/12/17 15:27:00", updated_at: "2023/12/17 15:27:00" },
-            { No: 5, order_id: 2, item_no: 6, name: "なし", amount: 1, created_at: "2023/12/17 15:29:00", updated_at: "2023/12/17 15:29:00" },
-            { No: 6, order_id: 1, item_no: 5, name: "りんご", amount: 3, created_at: "2023/12/17 15:30:00", updated_at: "2023/12/17 15:32:00" },
-            { No: 7, order_id: 2, item_no: 0, name: "さくらんぼ", amount: 1, created_at: "2023/12/17 15:35:00", updated_at: "2023/12/17 15:35:00" },
-        ]
-
         setInterval('showClock("showClock")', 1000);
 
         function addTable(Type = "ShowB", order_id, created_at) {
             var Item = document.createElement('div');
             Item.className = `Item_${Type}`;
             Item.innerHTML = `${order_id} ${created_at}`;
+
+            var Area = document.createElement('div');
+            Area.id = `Area_ShowD${order_id}`;
+            Area.className = `Area_ShowD`;
+
+            Item.appendChild(Area);
+
             document.getElementById("Area_ShowB").appendChild(Item);
         }
 
@@ -230,15 +219,42 @@
             for (var No = 0; No < TableList.length; No++) {
                 addTable("ShowB", TableList[No].order_id, TableList[No].created_at);
             }
-            for (var No = 0; No < ItemList.length; No++) {
-                addItemTile("ShowC", No, ItemList[No].name, ItemList[No].tab, Amount = 0, ItemList[No].price, ItemList[No].img);
+            for (var No = 0; No < OrderList.length; No++) {
+                addItemTile("ShowD", No, OrderList[No].name, OrderList[No].order_id, OrderList[No].amount, OrderList[No].price, OrderList[No].img);
             }
+            /* 方法A この方法だと0のitemも表示される */
+            for (var No = 0; No < ItemList.length; No++) {
+                addItemTile("ShowC", No, ItemList[No].name, "", Amount = 0, ItemList[No].price, ItemList[No].img);
+            }
+            for (var No = 0; No < OrderList.length; No++) {
+                for (var i = 0; i < OrderList[No].amount; i++) {
+                    add(OrderList[No].item_no, ["ShowC_Value"]);
+                }
+            }
+            /* 方法B この方法だと同一itemもばらばらに表示される => itemごとの合計値を取得しておく必要あり*/
+            // for (var No = 0; No < OrderList.length; No++) {
+            //     addItemTile("ShowC", No, OrderList[No].name, "", OrderList[No].amount, OrderList[No].price, OrderList[No].img);
+            // }
             //3エリアにそれぞれorder内容を追加する処理を追加
         }
         window.onload = function () {
             loadItemList();
             addSideScroll("Area_ShowB");
         };
+
+        // 数量の増減メソッド
+        function add(No, Type) {
+            var Menu_Value = document.getElementsByClassName(`Menu${No}`);
+            Array.from(Menu_Value).forEach(function (element) {
+                var hasSameClass = Array.from(element.classList).some(function (className) {
+                    return Array.from(Type).includes(className);
+                });
+                if (hasSameClass) {
+                    element.innerHTML++;
+                }
+            })
+        }
+
 
     </script>
 </body>
