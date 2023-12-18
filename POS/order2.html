@@ -9,6 +9,7 @@
     <script type="text/javascript" src="./../util/scrollbar.js"></script>
     <script type="text/javascript" src="./../util/areacontrol.js"></script>
     <script type="text/javascript" src="item.js"></script>
+    <link rel="stylesheet" href="pos.css" type="text/css">
     <link rel="stylesheet" href="./../util/default.css" type="text/css">
     <link rel="stylesheet" href="./../util/popup.css" type="text/css">
     <link rel="stylesheet" href="./../util/scrollbar.css" type="text/css">
@@ -46,44 +47,6 @@
             --tab-amount: 5;
             /*Item_Menuを横に並べる最大数*/
             --item-max-amount: 4;
-            /*色指定*/
-            --use-color-a1: rgba(36, 50, 80, 1.0);
-            --use-color-a2: rgba(36, 50, 80, 0.9);
-            --use-color-a3: rgba(36, 50, 80, 0.5);
-            --use-color-b1: rgba(88, 94, 170, 0.8);
-            --use-color-b2: rgba(88, 94, 170, 0.9);
-            --use-color-c1: rgba(101, 154, 210, 0.7);
-        }
-
-        body {
-            background-color: black;
-            background-image: url("img/back.jpg");
-            background-size: cover;
-            user-select: none;
-        }
-
-        #showClock {
-            width: 15vw;
-        }
-
-        #Area_Top {
-            display: flex;
-            position: absolute;
-            top: 0vh;
-            left: 0vw;
-            width: 100vw;
-            height: 6vh;
-        }
-
-        #Area_Tab {
-            display: grid;
-            grid-template-columns: repeat(var(--tab-amount), 1fr);
-            gap: 5px;
-            position: absolute;
-            top: 6vh;
-            left: 0vw;
-            width: 100vw;
-            height: 8vh;
         }
 
         .Area_Menu {
@@ -158,12 +121,6 @@
             z-index: 5;
         }
 
-        #Area_Tab {
-            background-color: var(--use-color-a3);
-            border-top: 3px solid var(--use-color-a1);
-            border-bottom: 3px solid var(--use-color-a1);
-        }
-
         #Area_Operate,
         #Area_Confirm_Text,
         #Area_Confirm {
@@ -174,10 +131,6 @@
         #Area_History {
             background-color: var(--use-color-b2);
             border: solid 3px white;
-        }
-
-        .Item_Tab {
-            margin: 5px;
         }
 
         .Item_Menu {
@@ -195,11 +148,6 @@
             border-radius: 30px;
             border: solid 3px var(--use-color-a1);
             display: flex;
-        }
-
-        .FullSize {
-            width: 100%;
-            height: 100%;
         }
 
         #checkOrder,
@@ -228,15 +176,6 @@
             height: 30%;
         }
 
-        .sidehalf_div {
-            width: 50%;
-            height: 100%;
-        }
-
-        .Menu_Img {
-            background-size: cover;
-        }
-
         .Menu_ImgMenu {
             border-radius: 30px 30px 0px 0px;
         }
@@ -244,12 +183,6 @@
         .Menu_ImgConfirm,
         .Menu_ImgHistory {
             border-radius: 30px 0px 0px 30px;
-        }
-
-        .Menu_Title {
-            width: 100%;
-            height: 35%;
-            margin-top: 5%;
         }
 
         .Menu_Operate {
@@ -290,13 +223,6 @@
             border-radius: 20px;
         }
 
-        .Btn:hover {
-            background-color: var(--use-color-c1);
-        }
-
-        .Selected {
-            background-color: var(--use-color-c1);
-        }
     </style>
 
     <script>
