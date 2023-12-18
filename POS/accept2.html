@@ -7,6 +7,7 @@
     <script type="text/javascript" src="./../util/timer.js"></script>
     <script type="text/javascript" src="./../util/scrollbar.js"></script>
     <script type="text/javascript" src="./../util/areacontrol.js"></script>
+    <script type="text/javascript" src="item.js"></script>
     <link rel="stylesheet" href="./../util/default.css" type="text/css">
     <link rel="stylesheet" href="./../util/popup.css" type="text/css">
     <link rel="stylesheet" href="./../util/scrollbar.css" type="text/css">
@@ -118,22 +119,12 @@
             margin: 5px;
         }
 
-        /* .Item_Menu {
-            background-color: var(--use-color-b1);
-            margin: 5px;
-            width: 25vw;
-            border-radius: 30px;
-            border: solid 3px var(--use-color-a1);
-        } */
-
         .Item_ShowB {
-            /* display: inline-block; */
             background-color: var(--use-color-b1);
             width: 20vw;
             height: 70vh;
             border-radius: 30px;
             border: solid 3px var(--use-color-a1);
-            /* display: flex; */
         }
 
         .Item_ShowC {
@@ -150,7 +141,7 @@
         }
 
         .sidehalf_div {
-            width: 45%;
+            width: 50%;
             height: 100%;
         }
 
@@ -166,30 +157,6 @@
             width: 100%;
             height: 35%;
             margin-top: 5%;
-        }
-
-        .ShowC_Value {
-            width: calc(40% - 35px);
-        }
-
-        .mBtn {
-            width: 35px;
-            height: 35px;
-            margin-right: 10%;
-            margin-left: 20%;
-        }
-
-        .pBtn {
-            width: 35px;
-            height: 35px;
-            margin-right: 20%;
-            margin-left: 10%;
-        }
-
-        .ShowC_Value {
-            position: relative;
-            left: 4vw;
-            top: 1vh;
         }
 
         .Btn {
@@ -259,101 +226,12 @@
             document.getElementById("Area_ShowB").appendChild(Item);
         }
 
-        // function addTabArea(No) {
-        //     const newMenu = document.createElement('div');
-        //     newMenu.id = `Area_Menu${TabList[No].tab}`;
-        //     newMenu.className = 'Area_Menu';
-        //     if (No > 0) {
-        //         newMenu.style.display = 'none';
-        //     }
-        //     document.body.appendChild(newMenu);
-        // }
-
-        function addItem(Type = "Menu", No, Tab = "A", Name = "Menu", Price = 0, Img_URL = "") {
-            var Item = document.createElement('div');
-            Item.className = `Item_${Type}`;
-
-            var div_1st = document.createElement('div');
-            var div_2nd = document.createElement('div');
-
-            var Img = document.createElement('div');
-            Img.className = `Menu_Img FullSize Menu_Img${Type}`;
-            Img.style.backgroundImage = `url("${Img_URL}")`;
-            if (Type != "History") {
-                Img.setAttribute("onclick", `add(${No},["Menu_Value","Confirm_Value"]);`);
-            }
-
-            var Menu_Title = document.createElement('div');
-            Menu_Title.className = "Menu_Title";
-            Menu_Title.innerHTML = Name;
-
-            var Menu_Operate = document.createElement('div');
-            Menu_Operate.className = "Menu_Operate";
-
-            var subBtn = document.createElement('button');
-            subBtn.innerHTML = '-';
-            subBtn.className = "mBtn Btn default_text small_text";
-            subBtn.id = `sub${No}`;
-            subBtn.setAttribute("onclick", `sub(${No},["Menu_Value","Confirm_Value"]);`);
-
-            var value = document.createElement('div');
-            value.className = `${Type}_Value middle_text Menu${No}`;
-
-            var addBtn = document.createElement('button');
-            addBtn.innerHTML = '+';
-            addBtn.className = "pBtn Btn default_text small_text";
-            addBtn.id = `add${No}`;
-            addBtn.setAttribute("onclick", `add(${No},["Menu_Value","Confirm_Value"]);`);
-
-            if (Type == "Menu") {
-                div_1st.className = "upper_div";
-                div_2nd.className = "lower_div";
-                value.innerHTML = "0";
-                var observer = new MutationObserver(function (mutationsList, observer) {
-                    for (var mutation of mutationsList) {
-                        var length = document.querySelectorAll(`.Confirm_Value.Menu${No}`).length;
-                        if (mutation.type === 'childList' && length === 0 && value.innerHTML === "1") {
-                            // value.innerHTMLが1に変わったときの処理
-                            addItem(Type = "Confirm", No, Tab = "", Name, Price, Img_URL);
-                        }
-                    }
-                });
-                // MutationObserver を value 要素に対して設定
-                observer.observe(value, { childList: true, subtree: true });
-            } else if (Type == "Confirm") {
-                div_1st.className = "sidehalf_div";
-                div_2nd.className = "sidehalf_div";
-                value.innerHTML = "1";
-            } else if (Type == "History" || Type == "ShowC") {
-                div_1st.className = "sidehalf_div";
-                div_2nd.className = "sidehalf_div";
-                value.innerHTML = "0";
-            }
-
-            if (Type != "History" && Type != "ShowC") {
-                Menu_Operate.appendChild(subBtn);
-            }
-            Menu_Operate.appendChild(value);
-            if (Type != "History" && Type != "ShowC") {
-                Menu_Operate.appendChild(addBtn);
-            }
-
-            div_1st.appendChild(Img);
-            div_2nd.appendChild(Menu_Title);
-            div_2nd.appendChild(Menu_Operate);
-
-            Item.appendChild(div_1st);
-            Item.appendChild(div_2nd);
-
-            document.getElementById(`Area_${Type}${Tab}`).appendChild(Item);
-        }
-
         function loadItemList() {
             for (var No = 0; No < TableList.length; No++) {
                 addTable("ShowB", TableList[No].order_id, TableList[No].created_at);
             }
             for (var No = 0; No < ItemList.length; No++) {
-                addItem("ShowC", No, ItemList[No].tab, ItemList[No].name, ItemList[No].price, ItemList[No].img);
+                addItemTile("ShowC", No, ItemList[No].name, ItemList[No].tab, Amount = 0, ItemList[No].price, ItemList[No].img);
             }
             //3エリアにそれぞれorder内容を追加する処理を追加
         }
