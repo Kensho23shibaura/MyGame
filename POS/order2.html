@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <script type="text/javascript" src="./../util/popup.js"></script>
     <script type="text/javascript" src="./../util/timer.js"></script>
+    <script type="text/javascript" src="./../util/scrollbar.js"></script>
     <link rel="stylesheet" href="./../util/default.css" type="text/css">
     <link rel="stylesheet" href="./../util/popup.css" type="text/css">
     <link rel="stylesheet" href="./../util/scrollbar.css" type="text/css">
@@ -302,6 +303,10 @@
         .Btn:hover {
             background-color: var(--use-color-c1);
         }
+
+        .Selected {
+            background-color: var(--use-color-c1);
+        }
     </style>
 
     <script>
@@ -334,8 +339,12 @@
 
             var tabBtn = document.createElement('button');
             tabBtn.innerHTML = Name;
+            tabBtn.id = `Item_${Type}${Tab}`
             tabBtn.className = "FullSize Btn default_text small_text";
-            tabBtn.setAttribute("onclick", `showTab('Menu${Tab}');`);
+            if (Tab == "A") {
+                tabBtn.classList.add('Selected');
+            }
+            tabBtn.setAttribute("onclick", `showTab('${Tab}');`);
 
             Item.appendChild(tabBtn);
             document.getElementById("Area_Tab").appendChild(Item);
@@ -434,17 +443,7 @@
             for (var No = 0; No < TabList.length; No++) {
                 addTab("Tab", No, TabList[No].tab, TabList[No].name);
                 addTabArea(No);
-                const scrollContainer = document.getElementById(`Area_Menu${TabList[No].tab}`);
-                scrollContainer.addEventListener('wheel', (event) => {
-                    // マウスホイールのイベントを取得
-                    event.preventDefault(); // デフォルトのスクロールを無効にする
-                    // マウスホイールの deltaY プロパティを使用してスクロール方向を取得
-                    const direction = event.deltaY > 0 ? 1 : -1;
-                    // スクロール量を設定
-                    const scrollAmount = 50;
-                    // 横スクロール位置を調整
-                    scrollContainer.scrollLeft += scrollAmount * direction;
-                });
+                addSideScroll(`Area_Menu${TabList[No].tab}`);
             }
             for (var No = 0; No < ItemList.length; No++) {
                 addItem("Menu", No, ItemList[No].tab, ItemList[No].name, ItemList[No].price, ItemList[No].img);
@@ -463,12 +462,16 @@
         };
 
         //タブ切り替え
-        function showTab(Tab = "MenuA") {
+        function showTab(Tab = "A") {
             var Area_Menu = document.getElementsByClassName("Area_Menu");
             Array.from(Area_Menu).forEach(function (element) {
                 element.style.display = 'none';
             })
-            document.getElementById(`Area_${Tab}`).style.display = 'grid';
+            document.getElementById(`Area_Menu${Tab}`).style.display = 'grid';
+            document.querySelectorAll('.Selected').forEach(element => {
+                element.classList.remove('Selected');
+            });
+            document.getElementById(`Item_Tab${Tab}`).classList.add('Selected')
         }
 
         //Confirmの初期化
