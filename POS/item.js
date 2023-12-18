@@ -71,7 +71,16 @@ function addItemTile(Class, No, Name, Tab = "A", Amount = 0, Price = 0, Img_URL 
 
     // 金額
     // 追加時刻
-    // 完了・削除ボタン
+    // 完了・削除ボタン(場所・×・スワイプ)
+    if (["ShowD"].includes(Class)) {
+        var cmpBtn = document.createElement('button');
+        cmpBtn.innerHTML = '✓';
+        cmpBtn.className = "pmBtn Btn default_text small_text";
+        cmpBtn.id = `cmp${No}`;
+        cmpBtn.setAttribute("onclick", `cmp(${No},["Menu_Value","Confirm_Value"]);`);
+
+        div_2nd.appendChild(cmpBtn);
+    }
 
     // エリアに追加
     Item.appendChild(div_1st);
