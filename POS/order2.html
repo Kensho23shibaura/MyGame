@@ -6,6 +6,7 @@
     <script type="text/javascript" src="./../util/popup.js"></script>
     <script type="text/javascript" src="./../util/timer.js"></script>
     <script type="text/javascript" src="./../util/scrollbar.js"></script>
+    <script type="text/javascript" src="./../util/areacontrol.js"></script>
     <link rel="stylesheet" href="./../util/default.css" type="text/css">
     <link rel="stylesheet" href="./../util/popup.css" type="text/css">
     <link rel="stylesheet" href="./../util/scrollbar.css" type="text/css">
@@ -333,18 +334,18 @@
 
         setInterval('showClock("showClock")', 1000);
 
-        function addTab(Type = "Tab", No, Tab = "A", Name = "Menu TabA") {
+        function addTab(No, Tab = "A", Name = "Menu TabA") {
             var Item = document.createElement('div');
-            Item.className = `Item_${Type}`;
+            Item.className = `Item_Tab`;
 
             var tabBtn = document.createElement('button');
             tabBtn.innerHTML = Name;
-            tabBtn.id = `Item_${Type}${Tab}`
+            tabBtn.id = `Item_Tab${Tab}`;
             tabBtn.className = "FullSize Btn default_text small_text";
             if (Tab == "A") {
                 tabBtn.classList.add('Selected');
             }
-            tabBtn.setAttribute("onclick", `showTab('${Tab}');`);
+            tabBtn.setAttribute("onclick", `selectTab('Area_Menu', 'Item_Tab', '${Tab}');`);
 
             Item.appendChild(tabBtn);
             document.getElementById("Area_Tab").appendChild(Item);
@@ -441,7 +442,7 @@
 
         function loadItemList() {
             for (var No = 0; No < TabList.length; No++) {
-                addTab("Tab", No, TabList[No].tab, TabList[No].name);
+                addTab(No, TabList[No].tab, TabList[No].name);
                 addTabArea(No);
                 addSideScroll(`Area_Menu${TabList[No].tab}`);
             }
@@ -480,16 +481,7 @@
             Array.from(Menu_Value).forEach(function (element) {
                 element.innerHTML = 0;
             })
-            resetArea(['Confirm']);
-        }
-        function resetArea(resetType) {
-            resetType.forEach(function (type) {
-                var area = document.getElementById(`Area_${type}`);
-                var items = document.getElementsByClassName(`Item_${type}`);
-                Array.from(items).forEach(function (element) {
-                    area.removeChild(element);
-                });
-            });
+            resetItemInArea(['Confirm']);
         }
 
         function submitConfirm() {
@@ -533,16 +525,6 @@
             resetConfirm()
         }
 
-        // エリアの表示/非表示を変更
-        function updateDisplay(elementIds, newStyle) {
-            for (const id of elementIds) {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.style.display = newStyle;
-                }
-            }
-        }
-
         //お会計
         function finishOrder() {
             //order_idを新規取得
@@ -550,7 +532,7 @@
             storedNumber++;//SQL C01
             localStorage.setItem("order_id", storedNumber);
             // 履歴削除
-            resetArea(['History']);
+            resetItemInArea(['History']);
             resetConfirm()
         }
 
