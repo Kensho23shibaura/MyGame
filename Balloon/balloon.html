@@ -14,12 +14,16 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Percent Balloon</title>
   <style>
+    html{
+      touch-action: manipulation;
+    }
     body {
       background-image: url("img/sky.jpg");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       height: 100vh;
+      user-select: none;
     }
 
     .grid-container {
@@ -237,7 +241,7 @@
     <br>
     <button id="addBtn" class="action_button default_text small_text" onclick="addHealth(50)">一律</button>
     <button id="resetBtn" class="action_button default_text small_text"
-      onclick="showAlert('','初期化してよろしいですか?','confirm','resetHealth()')">初期化</button>
+      onclick="showAlert('','初期化してよろしいですか?','confirm','resetHealth()')">開始</button>
     <button class="action_button default_text small_text" onclick="mute(this)" id="muteBtn">🔇ミュート中</button>
   </div>
   <br><br><br><br><br>
