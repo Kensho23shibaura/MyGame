@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="./../util/popup.css" type="text/css">
   <script type="text/javascript" src="popup2.js"></script>
   <link rel="stylesheet" href="popup2.css" type="text/css">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Percent Balloon</title>
   <style>
     body {
@@ -103,21 +105,58 @@
       border-radius: 15px;
       margin: calc(5px);
     }
-    #muteBtn{width: calc(20vw + 10px);}
 
-    #questionBtn {background: #3a5ee7;}
-    #questionBtn:hover {background: #2a4ed7;}
-    #answerBtn {background: #ffa500;}
-    #answerBtn:hover {background: #ef9500;}
-    #reflectBtn {background: #ff2f22;}
-    #reflectBtn:hover {background: #ef1f12;}
-    #resetBtn {background: #ff2f22;}
-    #resetBtn:hover {background: #ef1f12;}
-    #addBtn {background: #ffa500;}
-    #addBtn:hover {background: #ef9500;}
-    #muteBtn{background: #a9e54d;}
-    #muteBtn:hover{background: #99d53d;}
+    #muteBtn {
+      width: calc(20vw + 10px);
+    }
 
+    #questionBtn {
+      background: #3a5ee7;
+    }
+
+    #questionBtn:hover {
+      background: #2a4ed7;
+    }
+
+    #answerBtn {
+      background: #ffa500;
+    }
+
+    #answerBtn:hover {
+      background: #ef9500;
+    }
+
+    #reflectBtn {
+      background: #ff2f22;
+    }
+
+    #reflectBtn:hover {
+      background: #ef1f12;
+    }
+
+    #resetBtn {
+      background: #ff2f22;
+    }
+
+    #resetBtn:hover {
+      background: #ef1f12;
+    }
+
+    #addBtn {
+      background: #ffa500;
+    }
+
+    #addBtn:hover {
+      background: #ef9500;
+    }
+
+    #muteBtn {
+      background: #a9e54d;
+    }
+
+    #muteBtn:hover {
+      background: #99d53d;
+    }
   </style>
 </head>
 
@@ -130,7 +169,8 @@
       <div class="health-bar">
         <div class="current-health" id="health-bar-1"></div>
       </div>
-      <input type="number" class="answer-text-input default_text small_text" id="answerInput1" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput1" placeholder="回答" min="0"
+        step="1" max="100">
     </div>
 
     <div class="website-box">
@@ -139,7 +179,8 @@
       <div class="health-bar">
         <div class="current-health" id="health-bar-2"></div>
       </div>
-      <input type="number" class="answer-text-input default_text small_text" id="answerInput2" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput2" placeholder="回答" min="0"
+        step="1" max="100">
     </div>
 
     <div class="website-box">
@@ -148,7 +189,8 @@
       <div class="health-bar">
         <div class="current-health" id="health-bar-3"></div>
       </div>
-      <input type="number" class="answer-text-input default_text small_text" id="answerInput3" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput3" placeholder="回答" min="0"
+        step="1" max="100">
     </div>
 
     <div class="website-box">
@@ -157,7 +199,8 @@
       <div class="health-bar">
         <div class="current-health" id="health-bar-4"></div>
       </div>
-      <input type="number" class="answer-text-input default_text small_text" id="answerInput4" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput4" placeholder="回答" min="0"
+        step="1" max="100">
     </div>
 
     <div class="website-box">
@@ -166,7 +209,8 @@
       <div class="health-bar">
         <div class="current-health" id="health-bar-5"></div>
       </div>
-      <input type="number" class="answer-text-input default_text small_text" id="answerInput5" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput5" placeholder="回答" min="0"
+        step="1" max="100">
     </div>
 
     <div class="website-box">
@@ -175,7 +219,8 @@
       <div class="health-bar">
         <div class="current-health" id="health-bar-6"></div>
       </div>
-      <input type="number" class="answer-text-input default_text small_text" id="answerInput6" placeholder="回答" min="0" step="1" max="100">
+      <input type="number" class="answer-text-input default_text small_text" id="answerInput6" placeholder="回答" min="0"
+        step="1" max="100">
     </div>
 
   </div>
@@ -193,7 +238,7 @@
     <button id="addBtn" class="action_button default_text small_text" onclick="addHealth(50)">一律</button>
     <button id="resetBtn" class="action_button default_text small_text"
       onclick="showAlert('','初期化してよろしいですか?','confirm','resetHealth()')">初期化</button>
-    <button class="action_button default_text small_text" onclick ="mute(this)" id="muteBtn">🔇ミュート中</button>
+    <button class="action_button default_text small_text" onclick="mute(this)" id="muteBtn">🔇ミュート中</button>
   </div>
   <br><br><br><br><br>
   <div class="website-box2">
@@ -204,11 +249,11 @@
 
   <script>
     var muting = true;
-    function mute(obj){
-      if(muting == true){
+    function mute(obj) {
+      if (muting == true) {
         muting = false;
-        obj.innerHTML="🎵　通知中　"
-      }else if (muting == false){
+        obj.innerHTML = "🎵　通知中　"
+      } else if (muting == false) {
         stopAllAlarms();
         muting = true;
         obj.innerHTML = "🔇ミュート中";
@@ -218,28 +263,28 @@
     let questionNumber = 0;
     let startHealth = 200;
     let QAdict = {
-      "2022年の国内向け新車販売台数、<br>トヨタ車のシェアは何%?":47,
-      "日本の米の収穫量、<br>新潟県が占める割合、何%?":8,
-      "日本で落とした財布が<br>無事に戻ってくる確率、何%?":63,
-      "50代男性。<br>過去に職務質問をされたことがある人、何%?":44,
-      "働く女性に聞いた! <br>宝くじで1億円以上当たったら<br>今の仕事を辞める人、何%?":68,
-      "これまでに会社を<br>「ズル休み」したことがある人は何%?":38,
-      "自販機の下にお金が落ちている確率、何%?":10,
-      "飛行機内<br>「お客様の中にお医者様はいませんか!?」<br>⇒いる確率、何%?":49,
-      "共働き夫婦。<br>お互いの収入を知らない人は何%?":12,
+      "2022年の国内向け新車販売台数、<br>トヨタ車のシェアは何%?": 47,
+      "日本の米の収穫量、<br>新潟県が占める割合、何%?": 8,
+      "日本で落とした財布が<br>無事に戻ってくる確率、何%?": 63,
+      "50代男性。<br>過去に職務質問をされたことがある人、何%?": 44,
+      "働く女性に聞いた! <br>宝くじで1億円以上当たったら<br>今の仕事を辞める人、何%?": 68,
+      "これまでに会社を<br>「ズル休み」したことがある人は何%?": 38,
+      "自販機の下にお金が落ちている確率、何%?": 10,
+      "飛行機内<br>「お客様の中にお医者様はいませんか!?」<br>⇒いる確率、何%?": 49,
+      "共働き夫婦。<br>お互いの収入を知らない人は何%?": 12,
 
-      "20~30代。<br>LINEで告白したことある人、何%?":44,
-      "おみくじを引いたら<br>なんと「大凶」!!この確率、何%?(鶴岡八幡宮)":4,
-      "18歳~26歳。<br>「充実させたいのは仕事よりプライベート!」、何%?":68,
-      "夫婦で同じベッドで寝ている人の割合、何%?":28,
-      "みそ汁の一番好きな具材は<br>『豆腐』、何%?":11,
-      "大学生。<br>アルバイトをしたことがない人は何%?(2022)":4,
-      "スマホをフィルムやケースで<br>保護している人、何%?":88,
-      "日本の18歳、生成AIを<br>使ったことがある人は何%?(2023/08)":36,
-      "10~30代。直近1ヵ月以内に<br>スマホゲームでお金を使った人、何%?":28,
-      "日本国内の<br>iPhoneシェア、何%?(2023/08)":69,
-      "小中学生。<br>親と同じ仕事をしたい人は何%?":35,
-      "日本の年次有給休暇取得率は何%?(2022)":62,
+      "20~30代。<br>LINEで告白したことある人、何%?": 44,
+      "おみくじを引いたら<br>なんと「大凶」!!この確率、何%?(鶴岡八幡宮)": 4,
+      "18歳~26歳。<br>「充実させたいのは仕事よりプライベート!」、何%?": 68,
+      "夫婦で同じベッドで寝ている人の割合、何%?": 28,
+      "みそ汁の一番好きな具材は<br>『豆腐』、何%?": 11,
+      "大学生。<br>アルバイトをしたことがない人は何%?(2022)": 4,
+      "スマホをフィルムやケースで<br>保護している人、何%?": 88,
+      "日本の18歳、生成AIを<br>使ったことがある人は何%?(2023/08)": 36,
+      "10~30代。直近1ヵ月以内に<br>スマホゲームでお金を使った人、何%?": 28,
+      "日本国内の<br>iPhoneシェア、何%?(2023/08)": 69,
+      "小中学生。<br>親と同じ仕事をしたい人は何%?": 35,
+      "日本の年次有給休暇取得率は何%?(2022)": 62,
     }
 
     function nextQuestion() {
@@ -253,7 +298,7 @@
     }
 
     function showQuestion() {
-      if (muting == false){
+      if (muting == false) {
         const sound = playAlarm("img/question.mp3", false);
       }
       const questionTextElement = document.getElementById('questionText');
@@ -261,7 +306,7 @@
     }
 
     function showAnswer() {
-      if (muting == false){
+      if (muting == false) {
         const sound = playAlarm("img/drumroll1.mp3", false);
       }
       animateNumber();
@@ -281,7 +326,7 @@
         inputAnswerInput.value = "";
       }
     }
-    function addHealth(value=50) {
+    function addHealth(value = 50) {
       for (let barNumber = 1; barNumber <= numHealthBars; barNumber++) {
         currentHealth[barNumber - 1] = currentHealth[barNumber - 1] + value;
       }
@@ -292,12 +337,12 @@
       for (let barNumber = 1; barNumber <= numHealthBars; barNumber++) {
         const inputAnswerInput = document.getElementById(`answerInput${barNumber}`);
         const correctAnswer = document.getElementById('correctAnswerInput').value;
-        if (inputAnswerInput.value == ''){
+        if (inputAnswerInput.value == '') {
           continue;
         }
         const inputAnswer = parseInt(inputAnswerInput.value);
         if (inputAnswer == correctAnswer) {
-          if (muting == false){
+          if (muting == false) {
             const sound = playAlarm("img/fanfare.mp3", false);
           }
         }
@@ -356,7 +401,7 @@
         if (stepCount >= steps) {
           clearInterval(animationIntervalId);
           resultDisplay.textContent = "正解：" + set2fig(targetNumber) + "%";
-          if (muting == false){
+          if (muting == false) {
             const sound = playAlarm("img/drumroll2.mp3", false);
           }
         }
