@@ -64,8 +64,8 @@
       position: absolute;
       top: 1px;
       left: 5px;
-      width: 10vw;
-      height: 10vh;
+      width: 12vw;
+      height: 8vh;
       margin: 3px;
       padding: 10px;
     }
@@ -112,14 +112,14 @@
     }
 
     .action_button {
-      width: 12vw;
+      width: 13vw;
       height: 5vh;
       border-radius: 15px;
       margin: calc(5px);
     }
 
     #muteBtn {
-      width: calc(24vw + 10px);
+      width: calc(26vw + 10px);
     }
 
     .Btn {
@@ -359,7 +359,7 @@
       }
     }
 
-    function animateNumber() {
+    async function animateNumber() {
       var inputNumber = document.getElementById('correctAnswerInput');
       if (Object.keys(QAdict).length >= questionNumber) {
         let firstQuestion = Object.keys(QAdict)[questionNumber];
@@ -384,10 +384,16 @@
           resultDisplay.textContent = "正解：" + set2fig(targetNumber) + "%";
           if (muting == false) {
             const sound = playAlarm("img/drumroll2.mp3", false);
+            // setTimeout(showAlert('','結果を反映してよろしいですか?','confirm','decreaseHealth()'),3000);
           }
         }
       }, animationInterval);
+      await sleep(7000);
+      showAlert('', '結果を反映してよろしいですか?', 'confirm', 'decreaseHealth()')
     }
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    };
 
   </script>
 
