@@ -138,6 +138,15 @@
     .Selected {
       background-color: var(--use-color-c1);
     }
+
+    .miniBtn{
+      position: fixed;
+      left: 6vw;
+      bottom: 0vh;
+      width: 10px;
+      height: 10px;
+      font-size: 5px;
+    }
   </style>
 </head>
 
@@ -221,8 +230,9 @@
       onclick="showAlert('','初期化してよろしいですか?','confirm','resetHealth()')">初期化</button>
     <button class="Btn action_button default_text small_text" onclick="mute(this)" id="muteBtn">🔇ミュート中</button>
     <input type="password" class="correct-answer" id="correctAnswerInput" placeholder="正解" min="0" step="1"
-      max="100"><br><br>
-  </div>
+      max="100">
+      <button class="miniBtn" onclick="showAlert('','初期化してよろしいですか?','confirm','reload()')" id="reloadBtn">再読込</button>
+    </div>
   <!-- <br><br><br><br><br>
   <div class="website-box2">
   </div> -->
@@ -239,6 +249,10 @@
         muting = true;
         obj.innerHTML = "🔇ミュート中";
       }
+    }
+
+    function reload(){
+      window.location.reload();
     }
 
     let questionNumber = 0;
