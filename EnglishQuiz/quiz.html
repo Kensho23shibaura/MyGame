@@ -22,6 +22,9 @@
             background-image: url("img/blackboard.png");
             background-size: 100%;
             background-repeat: no-repeat;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(8, 1fr);
         }
 
         #result-container {
@@ -29,54 +32,55 @@
         }
 
         .question-text {
-            width: 40vw;
-            position: absolute;
-            top: 4vw;
-            left: 5vw;
+            grid-column: 2/5;
+            grid-row: 2;
+            background-color: aqua;
         }
 
-        #answer_area{
-            width: 80%;
-            height: 8vw;
-            position: relative;
-            left: 10%;
-            top: 7vw;
-        }
-        .answerBtn{
-            width: 30%;
-            height: 4vw;
-            position: relative;
+        /* .answerBtn {
+            background-color: blueviolet;
             font-size: auto;
+        } */
+        #answerBtn_0 {
+            grid-column: 2;
+            grid-row: 4;
         }
 
-        .answer-text {
-            width: 28vw;
-            height: 4vw;
-            position: absolute;
-            top: 16vw;
-            left: 5vw;
+        #answerBtn_1 {
+            grid-column: 3;
+            grid-row: 4;
         }
 
-        #answerBtn {
-            width: 10vw;
-            height: 4vw;
-            position: absolute;
-            top: 16.5vw;
-            left: 34.5vw;
+        #answerBtn_2 {
+            grid-column: 4;
+            grid-row: 4;
         }
 
-        .feedback-text {
-            width: 40vw;
-            position: absolute;
-            left: 5vw;
+        #answerBtn_3 {
+            grid-column: 2;
+            grid-row: 5;
+        }
+
+        #answerBtn_4 {
+            grid-column: 3;
+            grid-row: 5;
+        }
+
+        #answerBtn_5 {
+            grid-column: 4;
+            grid-row: 5;
         }
 
         #answer-feedback {
-            top: 24vw;
+            grid-column: 2/5;
+            grid-row: 6;
+            background-color: chocolate;
         }
 
         #score {
-            top: 27vw;
+            grid-column: 2/5;
+            grid-row: 7;
+            background-color: blue;
         }
 
         @media screen and (max-width:1200px) {
@@ -84,39 +88,6 @@
                 width: 90vw;
                 height: 60vw;
                 left: 5vw;
-            }
-
-            .question-text {
-                width: 80vw;
-                top: 15vw;
-                left: 5vw;
-            }
-
-            .answer-text {
-                width: 54vw;
-                height: 4vw;
-                top: 30vw;
-                left: 10vw;
-            }
-
-            #answerBtn {
-                width: 16vw;
-                height: 4vw;
-                top: 31vw;
-                left: 65vw;
-            }
-
-            .feedback-text {
-                width: 80vw;
-                left: 5vw;
-            }
-
-            #answer-feedback {
-                top: 42vw;
-            }
-
-            #score {
-                top: 48vw;
             }
         }
     </style>
@@ -130,16 +101,13 @@
     <button id="startBtn" class="default_text" onclick="startQuiz()">クイズを始める</button>
     <button id="addQuestionBtn" class="default_text" onclick="addQuestion()">問題増加</button>
     <div id="quiz-container">
-        <br><br><br><br><br><br><br>
         <p id="question" class="question-text large_text shadow">???</p>
-        <div id="answer_area">
-            <button id="answerBtn_0" class="defaultBtn default_text answerBtn" onclick="checkAnswer(0)"></button>
-            <button id="answerBtn_1" class="defaultBtn default_text answerBtn" onclick="checkAnswer(1)"></button>
-            <button id="answerBtn_2" class="defaultBtn default_text answerBtn" onclick="checkAnswer(2)"></button><br>
-            <button id="answerBtn_3" class="defaultBtn default_text answerBtn" onclick="checkAnswer(3)"></button>
-            <button id="answerBtn_4" class="defaultBtn default_text answerBtn" onclick="checkAnswer(4)"></button>
-            <button id="answerBtn_5" class="defaultBtn default_text answerBtn" onclick="checkAnswer(5)"></button>
-        </div>
+        <button id="answerBtn_0" class="defaultBtn default_text answerBtn" onclick="checkAnswer(0)"></button>
+        <button id="answerBtn_1" class="defaultBtn default_text answerBtn" onclick="checkAnswer(1)"></button>
+        <button id="answerBtn_2" class="defaultBtn default_text answerBtn" onclick="checkAnswer(2)"></button><br>
+        <button id="answerBtn_3" class="defaultBtn default_text answerBtn" onclick="checkAnswer(3)"></button>
+        <button id="answerBtn_4" class="defaultBtn default_text answerBtn" onclick="checkAnswer(4)"></button>
+        <button id="answerBtn_5" class="defaultBtn default_text answerBtn" onclick="checkAnswer(5)"></button>
         <p id="answer-feedback" class="feedback-text small_text">?????</p>
         <p id="score" class="feedback-text small_text">正解数: 0 / 20</p>
     </div>
@@ -184,7 +152,7 @@
         function startQuiz() {
             document.getElementById('startBtn').disabled = true;
             currentQuestion = Math.floor(Math.random() * questions.length);
-            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('quiz-container').style.display = 'grid';
             document.getElementById('result-container').style.display = 'none';
             showQuestion();
             if (muting == false) {
@@ -216,7 +184,7 @@
         function checkAnswer(selectNo) {
             const feedbackElement = document.getElementById('answer-feedback');
             const correctAnswersString = questions[currentQuestion].meanings.join('、');
-            if (currentQuestionNo == selectNo){
+            if (currentQuestionNo == selectNo) {
                 feedbackElement.textContent = `正解！正解は「${correctAnswersString}」です。`;
                 correctAnswers++;
             } else {
