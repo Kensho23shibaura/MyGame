@@ -23,8 +23,8 @@
             background-size: 100%;
             background-repeat: no-repeat;
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(8, 1fr);
+            grid-template-columns: 1fr 2fr 2fr 2fr 1fr;
+            grid-template-rows: 4fr 6fr 1fr 4fr 4fr 3fr 3fr 2fr;
         }
 
         #result-container {
@@ -191,7 +191,7 @@
                 feedbackElement.textContent = `不正解。正解は「${correctAnswersString}」です。`;
             }
 
-            if (correctAnswers < goalCorrectAnswers) {
+            if (currentQuestion < questions.length && correctAnswers < goalCorrectAnswers) {
                 showQuestion();
             } else {
                 showResult();
@@ -202,6 +202,7 @@
             stopAllAlarms();
             banner('終了', calcElapsedTime(startTime, getNowTime()));
             document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('quiz-container').innerHTML = '';
             document.getElementById('result-container').style.display = 'block';
             document.getElementById('startBtn').disabled = false;
 
